@@ -19,7 +19,7 @@ def create_table_from_csv():
             CREATE TABLE IF NOT EXISTS transactions_Payment (
                 CustomerNumber TEXT,
                 InvoiceDate TEXT,
-                Amount REAL,
+                Amount REAL
                 -- Add other columns as per your CSV file
             )
         ''')
