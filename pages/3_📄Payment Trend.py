@@ -1,24 +1,19 @@
 import streamlit as st
-import sqlite3
 import pandas as pd
 
 st.set_page_config(layout="wide")
 
 # Function to fetch transactions based on the inquiry
-def fetch_transactions(inquiry):
-    conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
-    transactions = pd.read_sql_query(query, conn)
-    conn.close()
-    return transactions
-
-# Function to display the table based on the inquiry
-def display_table(transactions):
-    if transactions.empty:
-        st.markdown("**No transactions found for the given inquiry.**")
-    else:
-        st.markdown("**Filtered Transactions:**")
-        st.dataframe(transactions)
+def fetch_transactions(df, inquiry):
+    try:
+        # Convert the inquiry into a query string
+        query = f"{inquiry}"
+        # Use the query method to filter the DataFrame
+        transactions = df.query(query)
+        return transactions
+    except Exception as e:
+        st.error(f"Error processing the inquiry: {str(e)}")
+        return pd.DataFrame()
 
 # Initialize Streamlit app
 def main():
@@ -31,9 +26,16 @@ def main():
         **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
     """)
 
+    # Load data from CSV file
+    try:
+        df = pd.read_csv('history.csv')
+    except FileNotFoundError:
+        st.error("CSV file not found. Please ensure the 'history.csv' file is in the same directory as the script.")
+        return
+
     # Example inquiries section
     example_inquiries = [
-        "CustomerNumber = '843937'",
+        "CustomerNumber == '843937'",
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -44,11 +46,12 @@ def main():
 
     # Display transactions table based on the inquiry
     if st.button('Submit'):
-        try:
-            transactions = fetch_transactions(inquiry)
-            display_table(transactions)
-        except Exception as e:
-            st.markdown(f"**Error occurred:** {str(e)}")
+        transactions = fetch_transactions(df, inquiry)
+        if not transactions.empty:
+            st.markdown("**Filtered Transactions:**")
+            st.dataframe(transactions)
+        else:
+            st.markdown("**No transactions found for the given inquiry.**")
 
 if __name__ == '__main__':
     main()
