@@ -17,12 +17,12 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Create table dynamically based on specified header
-    columns = ', '.join([f"{col} TEXT" for col in header])
+    columns = ', '.join([f"`{col}` TEXT" for col in header])
     print(f"Creating table with columns: {columns}")  # Print columns for debugging
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
 
     # Read data from CSV and insert into table
-    with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
@@ -43,7 +43,7 @@ create_table_from_csv()
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY `InvoiceDate` DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
