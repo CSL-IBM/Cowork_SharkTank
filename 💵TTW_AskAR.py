@@ -84,7 +84,7 @@ def change_button_color(widget_label, background_color='transparent'):
 change_button_color('Chat with My AI Assistant', '#0cc789') 
 
 with col2:
-    profile = Image.open("images/profile.png")
+    profile = Image.open("images/SharkTank.png")
     st.image(profile, width=280)
 
 endorsements = {
