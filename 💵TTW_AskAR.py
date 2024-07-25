@@ -87,9 +87,10 @@ with col2:
     profile = Image.open("images/profile.png")
     st.image(profile, width=280)
 
+       
 st.write("---")
 with st.container():  
-    col1, col2, col3 = st.columns([0.475, 0.475, 0.05])
+    col1,col2,col3 = st.columns([0.475, 0.475, 0.05])
         
     with col1:
         st.subheader("👄 Coworker Endorsements")
@@ -146,15 +147,15 @@ with st.container():
         <body>
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                <img src={info["endorsements"]["img1"]} style="width:100%">
+                <img src={endorsements["img1"]} style="width:100%">
                 </div>
 
                 <div class="mySlides fade">
-                <img src={info["endorsements"]["img2"]} style="width:100%">
+                <img src={endorsements["img2"]} style="width:100%">
                 </div>
 
                 <div class="mySlides fade">
-                <img src={info["endorsements"]["img3"]} style="width:100%">
+                <img src={endorsements["img3"]} style="width:100%">
                 </div>
 
             </div>
@@ -209,7 +210,7 @@ with st.container():
 
             """,
                 height=270,
-        )
+    )
 
     with col2:
         st.subheader("📨 Contact Me")
