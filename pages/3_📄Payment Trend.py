@@ -58,12 +58,12 @@ def plot_hourly_distribution(transactions):
     hour_counts = transactions['Hour'].value_counts().sort_index()
 
     # Create bar chart
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(5, 3))
     plt.bar(hour_counts.index, hour_counts.values, width=0.8)
-    plt.xlabel('Hour of Day')
+    plt.xlabel('Hour')
     plt.ylabel('Number of Payments')
-    plt.title('Number of Payments by Hour of Day')
-    plt.xticks(range(0, 24))
+    plt.title('Payment Trend')
+    plt.xticks(range(0, 12))
     st.pyplot(plt)
 
 # Initialize Streamlit app
