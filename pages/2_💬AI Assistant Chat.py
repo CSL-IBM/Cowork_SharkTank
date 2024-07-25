@@ -11,7 +11,7 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Read data from CSV and dynamically create table
-    with open('/mnt/data/transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         header = next(csvreader)  # Read header
         print(f"CSV Header: {header}")  # 출력하여 확인
