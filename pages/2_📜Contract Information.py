@@ -2,7 +2,6 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import csv
-import os
 
 st.set_page_config(layout="wide")
 
@@ -18,27 +17,24 @@ def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
 
-    # 테이블이 존재하는지 확인하는 쿼리
-    c.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='transactions_EngageAR_Contract'")
-    if c.fetchone()[0] == 0:
-        # Create table dynamically based on specified header
-        columns = ', '.join([f"{col} TEXT" for col in header])
-        c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
+    # Create table dynamically based on specified header
+    columns = ', '.join([f"{col} TEXT" for col in header])
+    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
-        # Read data from CSV and insert into table
-        with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
-            csvreader = csv.reader(csvfile)
-            next(csvreader)  # Skip header in the CSV file
-            
-            # Insert CSV data into the table
-            for row in csvreader:
-                if len(row) == len(header):
-                    placeholders = ', '.join(['?' for _ in row])
-                    c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
-                else:
-                    raise ValueError("Number of columns in the row does not match the header length.")
+    # Read data from CSV and insert into table
+    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # Skip header in the CSV file
         
-        conn.commit()
+        # Insert CSV data into the table
+        for row in csvreader:
+            if len(row) == len(header):
+                placeholders = ', '.join(['?' for _ in row])
+                c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+            else:
+                raise ValueError("Number of columns in the row does not match the header length.")
+    
+    conn.commit()
     conn.close()
 
 # Call the function to create the table and import data
