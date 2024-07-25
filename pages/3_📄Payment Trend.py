@@ -28,9 +28,9 @@ def main():
 
     # Load data from CSV file
     try:
-        df = pd.read_csv('history.csv')
+        df = pd.read_csv('transactions_Payment.csv')
     except FileNotFoundError:
-        st.error("CSV file not found. Please ensure the 'history.csv' file is in the same directory as the script.")
+        st.error("CSV file not found. Please ensure the 'transactions_Payment.csv' file is in the same directory as the script.")
         return
 
     # Example inquiries section
