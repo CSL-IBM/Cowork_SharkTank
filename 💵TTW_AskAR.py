@@ -57,13 +57,18 @@ with col1:
     from streamlit_extras.switch_page_button import switch_page
     col_1, col_2, temp = st.columns([0.4,0.2,0.4])
     with col_1:
-        btn1 = st.button("Feel free to ask anything about AR")
+        btn1 = st.button("AskEngageAR")
         if btn1:
-            switch_page("AI_Assistant_Chat")
+            switch_page("AskEngageAR")
     with col_2:
+        btn2 = st.button("Contract Information")
+        if btn2:
+            switch_page("Contract Information")
+    with col_3:
         btn2 = st.button("Payment Trend")
         if btn2:
             switch_page("Payment Trend")
+
 
 import streamlit.components.v1 as components
 
