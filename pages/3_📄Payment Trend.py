@@ -61,13 +61,13 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "DueDate > DATE('now')",
-        "CustomerName = 'Lisa' AND CustomerNumber = '12345'",
-        "CustomerName = 'David' AND InvoiceAmount > '500'",
-        "CustomerName = 'John' AND InvoiceDate > '2024-08-01'",
-        "InvoiceAmount > '1000' GROUP BY CustomerName",
-        "DueDate > '2024-08-10'",
-        "CustomerNumber = '67890' GROUP BY CustomerName"
+        '"DueDate" > DATE("now")',
+        '"CustomerName" = \'Lisa\' AND "CustomerNumber" = \'12345\'',
+        '"CustomerName" = \'David\' AND "InvoiceAmount" > 500',
+        '"CustomerName" = \'John\' AND "InvoiceDate" > \'2024-08-01\'',
+        '"InvoiceAmount" > 1000 GROUP BY "CustomerName"',
+        '"DueDate" > \'2024-08-10\'',
+        '"CustomerNumber" = \'67890\' GROUP BY "CustomerName"'
     ]
     
     st.markdown("**Example Inquiries:**")
