@@ -11,16 +11,26 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Read data from CSV and dynamically create table
-    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         header = next(csvreader)  # Read header
-        print(f"CSV Header: {header}")  # 출력하여 확인
-        columns = ', '.join([f"{col} TEXT" for col in header])
+        print(f"CSV Header: {header}")  # Output header to verify columns
+        first_row = next(csvreader)  # Read first row to check number of columns
+        print(f"First Row: {first_row}")  # Output first row to verify columns
         
+        # Verify that the number of columns in the header matches the number of columns in the first row
+        if len(header) != len(first_row):
+            raise ValueError("Number of columns in the header does not match the number of columns in the first row.")
+
         # Create table dynamically based on CSV header
+        columns = ', '.join([f"{col} TEXT" for col in header])
         c.execute(f'''CREATE TABLE IF NOT EXISTS transactions ({columns})''')
 
-        # Insert CSV data into the table
+        # Insert the first row into the table
+        placeholders = ', '.join(['?' for _ in first_row])
+        c.execute(f'INSERT INTO transactions VALUES ({placeholders})', first_row)
+
+        # Insert the remaining rows into the table
         for row in csvreader:
             placeholders = ', '.join(['?' for _ in row])
             c.execute(f'INSERT INTO transactions VALUES ({placeholders})', row)
