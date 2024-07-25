@@ -5,7 +5,7 @@ import csv
 
 st.set_page_config(layout="wide")
 
-# 명시적으로 CSV 파일의 열 이름을 지정합니다.
+# Define CSV file header
 header = [
     "No", "CustomerNumber", "CustomerName", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo."
@@ -17,7 +17,7 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Create table dynamically based on specified header
-    columns = ', '.join([f"{col} TEXT" for col in header])
+    columns = ', '.join([f'"{col}" TEXT' for col in header])
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
 
     # Read data from CSV and insert into table
@@ -61,12 +61,12 @@ def main():
     # Example inquiries section
     example_inquiries = [
         "DueDate > DATE('now')",
-        "Collector = 'Lisa' AND Category = 'Yellow'",
-        "Collector = 'David' AND ForecastCode = 'AUTO'",
-        "Collector = 'John' AND ForecastDate > '2024-08-01'",
-        "ForecastCode = 'AUTO' GROUP BY Collector",
+        "RepNo. = 'Lisa' AND Category = 'Yellow'",
+        "RepNo. = 'David' AND ForecastCode = 'AUTO'",
+        "RepNo. = 'John' AND ForecastDate > '2024-08-01'",
+        "ForecastCode = 'AUTO' GROUP BY RepNo.",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector"
+        "Category = 'Green' GROUP BY RepNo."
     ]
     
     st.markdown("**Example Inquiries:**")
