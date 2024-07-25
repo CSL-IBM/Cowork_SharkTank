@@ -10,6 +10,10 @@ def create_table_from_csv():
         # Load data from the uploaded CSV file
         df = pd.read_csv('transactions_Payment.csv')
 
+         # Only select necessary columns to avoid unnamed columns
+        df = df[['CustomerNumber', 'CustomerName', 'InvoiceNumber', 'InvoiceAmount', 'InvoiceDate', 'DueDate', 'PaymentTime', 'RepNo']]
+
+        
         # Connect to SQLite database
         conn = sqlite3.connect('history.db', check_same_thread=False)
         cursor = conn.cursor()
