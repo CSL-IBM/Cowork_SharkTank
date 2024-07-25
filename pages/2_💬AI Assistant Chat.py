@@ -25,7 +25,7 @@ def create_table_from_csv():
                  )''')
 
     # Read data from CSV and insert into SQLite table
-    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header
         for row in csvreader:
