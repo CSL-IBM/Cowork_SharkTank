@@ -1,17 +1,45 @@
 import streamlit as st
+import sqlite3
 import pandas as pd
 
 st.set_page_config(layout="wide")
 
-# Function to fetch transactions based on the inquiry
-def fetch_transactions(df, inquiry):
+# Function to create table and import data from CSV
+def create_table_from_csv():
     try:
-        # Use the query method to filter the DataFrame
-        transactions = df.query(inquiry)
-        return transactions
+        # Load data from the uploaded CSV file
+        df = pd.read_csv('/mnt/data/transactions_Payment.csv')
+
+        # Connect to SQLite database
+        conn = sqlite3.connect('history.db', check_same_thread=False)
+        cursor = conn.cursor()
+
+        # Create table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract (
+                CustomerNumber TEXT,
+                InvoiceDate TEXT,
+                Amount REAL,
+                -- Add other columns as per your CSV file
+            )
+        ''')
+
+        # Import data into the table
+        df.to_sql('transactions_EngageAR_Contract', conn, if_exists='replace', index=False)
+
+        # Close the connection
+        conn.close()
+        st.success("Table created and data imported successfully.")
     except Exception as e:
-        st.error(f"Error processing the inquiry: {str(e)}")
-        return pd.DataFrame()
+        st.error(f"Error creating table or importing data: {str(e)}")
+
+# Function to fetch transactions based on the inquiry
+def fetch_transactions(inquiry):
+    conn = sqlite3.connect('history.db', check_same_thread=False)
+    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    transactions = pd.read_sql_query(query, conn)
+    conn.close()
+    return transactions
 
 # Initialize Streamlit app
 def main():
@@ -24,12 +52,8 @@ def main():
         **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
     """)
 
-    # Load data from the uploaded CSV file
-    try:
-        df = pd.read_csv('transactions_Payment.csv')
-    except FileNotFoundError:
-        st.error("CSV file not found. Please ensure the 'transactions_Payment.csv' file is uploaded.")
-        return
+    # Call the function to create the table and import data
+    create_table_from_csv()
 
     # Example inquiries section
     example_inquiries = [
@@ -44,12 +68,15 @@ def main():
 
     # Display transactions table based on the inquiry
     if st.button('Submit'):
-        transactions = fetch_transactions(df, inquiry)
-        if not transactions.empty:
-            st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions)
-        else:
-            st.markdown("**No transactions found for the given inquiry.**")
+        try:
+            transactions = fetch_transactions(inquiry)
+            if not transactions.empty:
+                st.markdown("**Filtered Transactions:**")
+                st.dataframe(transactions)
+            else:
+                st.markdown("**No transactions found for the given inquiry.**")
+        except Exception as e:
+            st.markdown(f"**Error occurred:** {str(e)}")
 
 if __name__ == '__main__':
     main()
