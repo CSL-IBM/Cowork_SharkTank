@@ -78,12 +78,13 @@ def main():
 
     # Display transactions table based on the inquiry
     if st.button('Submit'):
-        try:
-            transactions = fetch_transactions(inquiry)
-            st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions)
-        except Exception as e:
-            st.markdown(f"**Error occurred:** {str(e)}")
+    try:
+        transactions = fetch_transactions(inquiry)
+        st.markdown("**Filtered Transactions:**")
+        st.dataframe(transactions, use_container_width=True)  # 여기서 use_container_width=True 옵션을 추가합니다.
+    except Exception as e:
+        st.markdown(f"**Error occurred:** {str(e)}")
+
 
 if __name__ == '__main__':
     main()
