@@ -5,52 +5,54 @@ import csv
 
 st.set_page_config(layout="wide")
 
-# Define CSV file header
+# CSV 파일 헤더 정의
 header = [
     "No", "CustomerNumber", "CustomerName", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo."
 ]
 
-# Function to create SQLite table and import data from CSV
+# SQLite 테이블 생성 및 CSV 데이터 삽입 함수
 def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
 
-    # Create table dynamically based on specified header
+    # 헤더를 기반으로 SQL 테이블 생성
     columns = ', '.join([f'"{col}" TEXT' for col in header])
-    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
+    create_table_sql = f'CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})'
+    c.execute(create_table_sql)
 
-    # Read data from CSV and insert into table
+    # CSV 파일에서 데이터 읽어 테이블에 삽입
     with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
-        csv_header = next(csvreader)  # Read the CSV header
+        csv_header = next(csvreader)  # CSV 헤더 읽기
 
-        # Debugging: Print the CSV header
+        # 디버깅: CSV 헤더와 정의된 헤더 출력
         st.write("CSV Header:", csv_header)
         st.write("Expected Header:", header)
 
-        # Strip whitespace from headers
+        # 헤더의 공백 제거
         csv_header = [col.strip() for col in csv_header]
         header = [col.strip() for col in header]
 
         if csv_header != header:
             raise ValueError("CSV header does not match the defined header.")
 
-        # Insert CSV data into the table
+        # CSV 데이터를 테이블에 삽입
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
-                c.execute(f'INSERT INTO transactions_Payment VALUES ({placeholders})', row)
+                insert_sql = f'INSERT INTO transactions_Payment VALUES ({placeholders})'
+                c.execute(insert_sql, row)
             else:
                 st.warning(f"Row with {len(row)} columns found, expected {len(header)} columns. Skipping row: {row}")
     
     conn.commit()
     conn.close()
 
-# Call the function to create the table and import data
+# 함수 호출하여 테이블 생성 및 데이터 삽입
 create_table_from_csv()
 
-# Function to fetch transactions based on the inquiry
+# 사용자 문의에 따라 거래내역 조회 함수
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
     query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
@@ -58,7 +60,7 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
-# Initialize Streamlit app
+# Streamlit 앱 초기화
 def main():
     st.title('Text-To-Watsonx : Engage AR')
 
@@ -69,7 +71,7 @@ def main():
         **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
     """)
 
-    # Example inquiries section
+    # 예시 문의 목록
     example_inquiries = [
         "DueDate > DATE('now')",
         "RepNo. = 'Lisa' AND Category = 'Yellow'",
@@ -83,10 +85,10 @@ def main():
     st.markdown("**Example Inquiries:**")
     selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
 
-    # Form for inquiry submission
+    # 문의 제출 폼
     inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
-    # Display transactions table based on the inquiry
+    # 제출된 문의에 따라 거래내역 테이블 표시
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
