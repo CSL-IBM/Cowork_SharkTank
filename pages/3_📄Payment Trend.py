@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
     "No", "CustomerNumber", "CustomerName", "InvoiceNumber", 
-    "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo."
+    "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo"
 ]
 
 # Function to create SQLite table and import data from CSV
