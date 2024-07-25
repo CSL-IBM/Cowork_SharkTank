@@ -42,10 +42,11 @@ def get_db_connection():
     conn = sqlite3.connect('history.db', check_same_thread=False)
     return conn
 
-# Function to fetch transactions from database
-def fetch_transactions():
+# Function to fetch transactions based on the inquiry
+def fetch_transactions(inquiry):
     conn = get_db_connection()
-    cursor = conn.execute('SELECT DISTINCT * FROM transactions ORDER BY InvoiceDate DESC')
+    query = f"SELECT * FROM transactions WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    cursor = conn.execute(query)
     transactions = cursor.fetchall()
     conn.close()
 
@@ -71,13 +72,13 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "What are the items with a due date after today?",
-        "Show me the list where the collector is Lisa and the category is Yellow!",
-        "Show me the list where the collector is David and the forecast code is AUTO!",
-        "Show me the list where the collector is John and the forecast date is after August!",
-        "How many AUTO in Forecastcode per collector?",
-        "How many invoice numbers with due date greater than August 10th 2024?",
-        "How many green per collector in category?"
+        "DueDate > DATE('now')",
+        "Collector = 'Lisa' AND Category = 'Yellow'",
+        "Collector = 'David' AND ForecastCode = 'AUTO'",
+        "Collector = 'John' AND ForecastDate > '2024-08-01'",
+        "ForecastCode = 'AUTO' GROUP BY Collector",
+        "DueDate > '2024-08-10'",
+        "Category = 'Green' GROUP BY Collector"
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -86,24 +87,14 @@ def main():
     # Form for inquiry submission
     inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
+    # Display transactions table based on the inquiry
     if st.button('Submit'):
-        conn = get_db_connection()
         try:
-            # Construct SQL query based on the inquiry text
-            query = f"SELECT * FROM transactions WHERE {inquiry} ORDER BY InvoiceDate DESC"
-            cursor = conn.execute(query)
-            response = cursor.fetchall()
-            st.markdown(f"**Response:**")
-            st.write(response)
+            transactions = fetch_transactions(inquiry)
+            st.markdown("**Filtered Transactions:**")
+            st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-        finally:
-            conn.close()
-
-    # Display transactions table using Pandas DataFrame
-    st.markdown("**Transactions:**")
-    transactions = fetch_transactions()
-    st.dataframe(transactions)
 
     # Custom CSS for table styling
     st.markdown(
