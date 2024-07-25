@@ -1,4 +1,4 @@
-No,CustomerNumber,CustomerName,InvoiceNumber,InvoiceAmount,InvoiceDate,DueDate,PaymentTime,RepNo.,,,,,,,,
+No,CustomerNumber,CustomerName,InvoiceNumber,InvoiceAmount,InvoiceDate,DueDate,PaymentTime,RepNo,,,,,,,,
 1,843937,Mary Company,AB1234,"318,856,980",2022-10-11,2022-11-10,2022-11-09 14:17,QAE7300167T,,,,,,,,
 2,553924,Robert Company,CD5678,"380,035,181",2022-10-24,2022-11-23,2022-11-10 15:04,QAB6177408T,,,,,,,,
 3,843937,Mary Company,EF9101,"367,192,117",2022-10-25,2022-11-24,2022-11-08 17:29,QAD6067810T,,,,,,,,
