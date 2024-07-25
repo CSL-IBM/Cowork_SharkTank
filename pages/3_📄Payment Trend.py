@@ -63,7 +63,7 @@ def plot_hourly_distribution(transactions):
     plt.xlabel('Hour')
     plt.ylabel('Number of Payments')
     plt.title('Payment Trend')
-    plt.xticks(range(0, 12))
+    plt.xticks(range(0, 24))
     st.pyplot(plt)
 
 # Initialize Streamlit app
