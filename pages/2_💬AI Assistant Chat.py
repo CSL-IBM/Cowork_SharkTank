@@ -78,7 +78,8 @@ def main():
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector"
+        "Category = 'Green' GROUP BY Collector",
+        "CustomerNumber = 123456"  # New example inquiry added here
     ]
     
     st.markdown("**Example Inquiries:**")
