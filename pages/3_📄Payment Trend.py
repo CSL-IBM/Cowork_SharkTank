@@ -6,10 +6,8 @@ st.set_page_config(layout="wide")
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(df, inquiry):
     try:
-        # Convert the inquiry into a query string
-        query = f"{inquiry}"
         # Use the query method to filter the DataFrame
-        transactions = df.query(query)
+        transactions = df.query(inquiry)
         return transactions
     except Exception as e:
         st.error(f"Error processing the inquiry: {str(e)}")
@@ -26,11 +24,11 @@ def main():
         **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
     """)
 
-    # Load data from CSV file
+    # Load data from the uploaded CSV file
     try:
         df = pd.read_csv('transactions_Payment.csv')
     except FileNotFoundError:
-        st.error("CSV file not found. Please ensure the 'transactions_Payment.csv' file is in the same directory as the script.")
+        st.error("CSV file not found. Please ensure the 'transactions_Payment.csv' file is uploaded.")
         return
 
     # Example inquiries section
