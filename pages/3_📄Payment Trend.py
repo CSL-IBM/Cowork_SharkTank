@@ -3,8 +3,6 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.set_page_config(layout="wide")
-
 # Function to create table and import data from CSV
 def create_table_from_csv():
     try:
