@@ -23,15 +23,18 @@ def create_table_from_csv():
     # Read data from CSV and insert into table
     with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
-        next(csvreader)  # Skip header in the CSV file
-        
+        csv_header = next(csvreader)  # Read the CSV header
+        if csv_header != header:
+            raise ValueError("CSV header does not match the defined header.")
+
         # Insert CSV data into the table
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
                 c.execute(f'INSERT INTO transactions_Payment VALUES ({placeholders})', row)
             else:
-                raise ValueError("Number of columns in the row does not match the header length.")
+                # Log or handle row discrepancies
+                st.warning(f"Row with {len(row)} columns found, expected {len(header)} columns. Skipping row: {row}")
     
     conn.commit()
     conn.close()
