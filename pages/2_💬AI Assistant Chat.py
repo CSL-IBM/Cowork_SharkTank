@@ -12,7 +12,6 @@ def create_table_from_csv():
     
     # Create the transactions table if it doesn't exist
     c.execute('''CREATE TABLE IF NOT EXISTS transactions (
-                 No INTEGER,
                  Category TEXT,
                  CustomerName TEXT,
                  CustomerNumber INTEGER,
@@ -22,30 +21,15 @@ def create_table_from_csv():
                  DueDate TEXT,
                  ForecastCode TEXT,
                  ForecastDate TEXT,
-                 Collector TEXT,
-                 ContractNo TEXT,
-                 Link TEXT
+                 Collector TEXT
                  )''')
 
     # Read data from CSV and insert into SQLite table
-    try:
-        with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
-            csvreader = csv.reader(csvfile)
-            header = next(csvreader)  # Read header
-            st.write("CSV Header:", header)
-            if len(header) != 13:
-                st.error(f"CSV file should have 13 columns, but it has {len(header)} columns.")
-                return
-            
-            for row in csvreader:
-                st.write("CSV Row:", row)
-                if len(row) == 13:
-                    c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
-                else:
-                    st.error(f"Row has incorrect number of columns: {row}")
-    except Exception as e:
-        st.error(f"Error reading the file: {e}")
-        return
+    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # Skip header
+        for row in csvreader:
+            c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
     
     conn.commit()
     conn.close()
@@ -67,8 +51,8 @@ def fetch_transactions(inquiry):
     conn.close()
 
     # Convert fetched data into DataFrame
-    df = pd.DataFrame(transactions, columns=['No', 'Category', 'CustomerName', 'CustomerNumber', 'InvoiceNumber', 'InvoiceAmount',
-                                             'InvoiceDate', 'DueDate', 'ForecastCode', 'ForecastDate', 'Collector', 'ContractNo', 'Link'])
+    df = pd.DataFrame(transactions, columns=['Category', 'CustomerName', 'CustomerNumber', 'InvoiceNumber', 'InvoiceAmount',
+                                             'InvoiceDate', 'DueDate', 'ForecastCode', 'ForecastDate', 'Collector'])
     # Add 1 to index to make it 1-based
     df.index = df.index + 1
 
@@ -94,8 +78,7 @@ def main():
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector",
-        "CustomerNumber = 123456"  # New example inquiry added here
+        "Category = 'Green' GROUP BY Collector"
     ]
     
     st.markdown("**Example Inquiries:**")
