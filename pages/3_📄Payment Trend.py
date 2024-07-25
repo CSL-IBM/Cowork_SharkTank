@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
     "No", "CustomerNumber", "CustomerName", "InvoiceNumber", 
-    "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo"
+    "InvoiceAmount", "InvoiceDate", "DueDate", "PaymentTime", "RepNo."
 ]
 
 # Function to create SQLite table and import data from CSV
@@ -17,7 +17,7 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Create table dynamically based on specified header
-    columns = ', '.join([f'[{col}] TEXT' for col in header])
+    columns = ', '.join([f"{col} TEXT" for col in header])
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
 
     # Read data from CSV and insert into table
@@ -42,17 +42,8 @@ create_table_from_csv()
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    # Safeguard against SQL injection - ensure 'inquiry' is safe or use parameterized queries
-    try:
-        # Ensure valid SQL syntax
-        if "GROUP BY" in inquiry:
-            query = f"SELECT * FROM transactions_Payment WHERE {inquiry}"
-        else:
-            query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY [InvoiceDate] DESC"
-        transactions = pd.read_sql_query(query, conn)
-    except pd.io.sql.DatabaseError as e:
-        st.error(f"SQL error: {e}")
-        transactions = pd.DataFrame()  # Return an empty DataFrame in case of error
+    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
 
@@ -69,13 +60,13 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        '[DueDate] > DATE("now")',
-        '[CustomerName] = \'Lisa\' AND [CustomerNumber] = \'12345\'',
-        '[CustomerName] = \'David\' AND [InvoiceAmount] > 500',
-        '[CustomerName] = \'John\' AND [InvoiceDate] > \'2024-08-01\'',
-        '[InvoiceAmount] > 1000 GROUP BY [CustomerName]',
-        '[DueDate] > \'2024-08-10\'',
-        '[CustomerNumber] = \'67890\' GROUP BY [CustomerName]'
+        "DueDate > DATE('now')",
+        "Collector = 'Lisa' AND Category = 'Yellow'",
+        "Collector = 'David' AND ForecastCode = 'AUTO'",
+        "Collector = 'John' AND ForecastDate > '2024-08-01'",
+        "ForecastCode = 'AUTO' GROUP BY Collector",
+        "DueDate > '2024-08-10'",
+        "Category = 'Green' GROUP BY Collector"
     ]
     
     st.markdown("**Example Inquiries:**")
