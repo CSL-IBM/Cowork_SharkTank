@@ -56,7 +56,7 @@ def plot_hourly_distribution(transactions):
     hour_counts = transactions['Hour'].value_counts().sort_index()
 
     # Create bar chart
-    fig, ax = plt.subplots(figsize=(12, 6))  # 크기를 조정함
+    fig, ax = plt.subplots(figsize=(6, 3))  # 크기를 조정함
     ax.bar(hour_counts.index, hour_counts.values, width=0.8)
     ax.set_xlabel('Hour')
     ax.set_ylabel('Number of Payments')
