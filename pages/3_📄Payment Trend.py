@@ -27,11 +27,12 @@ def create_table_from_csv():
         next(csvreader)  # Skip header in the CSV file
         
         # Insert CSV data into the table
-        for row in csvreader:
+        for i, row in enumerate(csvreader):
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
                 c.execute(f'INSERT INTO transactions_Payment VALUES ({placeholders})', row)
             else:
+                print(f"Row {i} length ({len(row)}) does not match header length ({len(header)}): {row}")
                 raise ValueError("Number of columns in the row does not match the header length.")
     
     conn.commit()
