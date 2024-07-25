@@ -19,10 +19,10 @@ def create_table_from_csv():
 
     # Create table dynamically based on specified header
     columns = ', '.join([f"{col} TEXT" for col in header])
-    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions ({columns})''')
+    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
-    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
@@ -30,7 +30,7 @@ def create_table_from_csv():
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
-                c.execute(f'INSERT INTO transactions_EngageAR&Contract VALUES ({placeholders})', row)
+                c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
             else:
                 raise ValueError("Number of columns in the row does not match the header length.")
     
@@ -43,7 +43,7 @@ create_table_from_csv()
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_EngageAR&Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
