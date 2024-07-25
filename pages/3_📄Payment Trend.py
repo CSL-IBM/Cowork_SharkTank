@@ -18,7 +18,7 @@ def create_table_from_csv():
 
     # Create table dynamically based on specified header
     columns = ', '.join([f"{col} TEXT" for col in header])
-    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
+    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
 
     # Read data from CSV and insert into table
     with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
