@@ -1,10 +1,9 @@
-# import the Streamlit library
 import streamlit as st
 from streamlit_option_menu import option_menu
 from utils.constants import *
 
 # configure page settings
-st.set_page_config(page_title='Template' ,layout="wide",initial_sidebar_state="auto", page_icon='👧🏻') # always show the sidebar
+st.set_page_config(page_title='Template', layout="wide", initial_sidebar_state="auto", page_icon='👧🏻')
 
 # load local CSS styles
 def local_css(file_name):
@@ -18,6 +17,13 @@ pronoun = info['Pronoun']
 
 # app sidebar (좌측 메뉴 하단)
 with st.sidebar:
+    selected_page = option_menu(
+        menu_title="Main Menu",
+        options=["Home", "AI Assistant Chat", "Raw Data"],
+        icons=["house", "chat", "database"],
+        menu_icon="cast",
+        default_index=0,
+    )
     st.markdown("""
                 # FAQ
                 """)
@@ -46,7 +52,7 @@ def hero(content1, content2):
                 unsafe_allow_html=True)
 
 with st.container():
-    col1,col2 = st.columns([8,3])
+    col1, col2 = st.columns([8, 3])
 
 full_name = info['Full_Name']
 with col1:
@@ -55,11 +61,11 @@ with col1:
     st.write(info['About'])
 
     from streamlit_extras.switch_page_button import switch_page
-    col_1, col_2, temp = st.columns([0.4,0.2,0.4])
+    col_1, col_2, temp = st.columns([0.4, 0.2, 0.4])
     with col_1:
         btn1 = st.button("Feel free to ask anything about AR")
         if btn1:
-            switch_page("AI_Assistant_Chat")
+            switch_page("AI Assistant Chat")
     with col_2:
         btn2 = st.button("Raw Data")
         if btn2:
@@ -82,7 +88,7 @@ def change_button_color(widget_label, background_color='transparent'):
 
 change_button_color('Chat with My AI Assistant', '#0cc789') 
 
-from  PIL import Image
+from PIL import Image
 with col2:
     profile = Image.open("images/profile.png")
     st.image(profile, width=280)
@@ -90,7 +96,7 @@ with col2:
        
 st.write("---")
 with st.container():  
-    col1,col2,col3 = st.columns([0.475, 0.475, 0.05])
+    col1, col2, col3 = st.columns([0.475, 0.475, 0.05])
         
     with col1:
         st.subheader("👄 Coworker Endorsements")
@@ -225,3 +231,24 @@ with st.container():
         </form>
         """
         st.markdown(contact_form, unsafe_allow_html=True)
+
+# 페이지별로 함수를 정의하고 selected_page 변수에 따라 해당 함수를 호출합니다.
+def show_home():
+    st.title("Home Page")
+    st.write("Welcome to the Home Page!")
+
+def show_ai_assistant_chat():
+    st.title("AI Assistant Chat")
+    st.write("Chat with the AI Assistant here.")
+
+def show_raw_data():
+    st.title("Raw Data")
+    st.write("Display the raw data here.")
+
+# 선택된 페이지에 따라 해당 함수 호출
+if selected_page == "Home":
+    show_home()
+elif selected_page == "AI Assistant Chat":
+    show_ai_assistant_chat()
+elif selected_page == "Raw Data":
+    show_raw_data()
