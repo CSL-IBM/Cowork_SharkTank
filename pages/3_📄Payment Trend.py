@@ -17,7 +17,7 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # 헤더를 기반으로 SQL 테이블 생성
-    columns = ', '.join([f'"{col}" TEXT' for col in header])
+    columns = ', '.join([f"{col} TEXT" for col in header])
     create_table_sql = f'CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})'
     c.execute(create_table_sql)
 
