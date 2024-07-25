@@ -85,12 +85,12 @@ def main():
             st.dataframe(transactions, use_container_width=True)
             
             if "InvoiceNumber" in inquiry:
-                for _, row in transactions.iterrows():
+                for idx, row in transactions.iterrows():
                     invoice_number = row['InvoiceNumber']
                     link = row['Link']
                     st.markdown(f"**InvoiceNumber: {invoice_number}**")
-                    if st.button(f"Open Link for {invoice_number}"):
-                        st.write(f"[Click here to open link]( {link})")
+                    if st.button(f"Open Link for {invoice_number}", key=f"button_{idx}"):
+                        st.write(f"[Click here to open link]({link})")
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
