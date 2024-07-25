@@ -15,10 +15,12 @@ header = [
 
 # Function to create SQLite table and import data from CSV
 def create_table_from_csv():
-    if not os.path.exists('history.db'):
-        conn = sqlite3.connect('history.db')
-        c = conn.cursor()
+    conn = sqlite3.connect('history.db')
+    c = conn.cursor()
 
+    # 테이블이 존재하는지 확인하는 쿼리
+    c.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='transactions_EngageAR_Contract'")
+    if c.fetchone()[0] == 0:
         # Create table dynamically based on specified header
         columns = ', '.join([f"{col} TEXT" for col in header])
         c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
@@ -37,7 +39,7 @@ def create_table_from_csv():
                     raise ValueError("Number of columns in the row does not match the header length.")
         
         conn.commit()
-        conn.close()
+    conn.close()
 
 # Call the function to create the table and import data
 create_table_from_csv()
