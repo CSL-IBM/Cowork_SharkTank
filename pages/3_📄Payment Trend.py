@@ -47,7 +47,7 @@ def fetch_transactions(inquiry):
     query = f'SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY "InvoiceDate" DESC'
     transactions = pd.read_sql_query(query, conn)
     conn.close()
-    return transactions_Payment
+    return transactions
 
 # Initialize Streamlit app
 def main():
