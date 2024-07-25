@@ -9,27 +9,20 @@ st.set_page_config(layout="wide")
 def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
-    
-    # Create the transactions table if it doesn't exist
-    c.execute('''CREATE TABLE IF NOT EXISTS transactions (
-                 Category TEXT,
-                 CustomerName TEXT,
-                 CustomerNumber INTEGER,
-                 InvoiceNumber TEXT,
-                 InvoiceAmount TEXT,
-                 InvoiceDate TEXT,
-                 DueDate TEXT,
-                 ForecastCode TEXT,
-                 ForecastDate TEXT,
-                 Collector TEXT
-                 )''')
 
-    # Read data from CSV and insert into SQLite table
+    # Read data from CSV and dynamically create table
     with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
-        next(csvreader)  # Skip header
+        header = next(csvreader)  # Read header
+        columns = ', '.join([f"{col} TEXT" for col in header])
+        
+        # Create table dynamically based on CSV header
+        c.execute(f'''CREATE TABLE IF NOT EXISTS transactions ({columns})''')
+
+        # Insert CSV data into the table
         for row in csvreader:
-            c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
+            placeholders = ', '.join(['?' for _ in row])
+            c.execute(f'INSERT INTO transactions VALUES ({placeholders})', row)
     
     conn.commit()
     conn.close()
@@ -51,8 +44,7 @@ def fetch_transactions(inquiry):
     conn.close()
 
     # Convert fetched data into DataFrame
-    df = pd.DataFrame(transactions, columns=['Category', 'CustomerName', 'CustomerNumber', 'InvoiceNumber', 'InvoiceAmount',
-                                             'InvoiceDate', 'DueDate', 'ForecastCode', 'ForecastDate', 'Collector'])
+    df = pd.DataFrame(transactions, columns=header)
     # Add 1 to index to make it 1-based
     df.index = df.index + 1
 
