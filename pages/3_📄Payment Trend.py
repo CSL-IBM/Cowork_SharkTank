@@ -8,7 +8,7 @@ st.set_page_config(layout="wide")
 def create_table_from_csv():
     try:
         # Load data from the uploaded CSV file
-        df = pd.read_csv('/mnt/data/transactions_Payment.csv')
+        df = pd.read_csv('transactions_Payment.csv')
 
         # Connect to SQLite database
         conn = sqlite3.connect('history.db', check_same_thread=False)
@@ -16,7 +16,7 @@ def create_table_from_csv():
 
         # Create table
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract (
+            CREATE TABLE IF NOT EXISTS transactions_Payment (
                 CustomerNumber TEXT,
                 InvoiceDate TEXT,
                 Amount REAL,
@@ -25,7 +25,7 @@ def create_table_from_csv():
         ''')
 
         # Import data into the table
-        df.to_sql('transactions_EngageAR_Contract', conn, if_exists='replace', index=False)
+        df.to_sql('transactions_Payment', conn, if_exists='replace', index=False)
 
         # Close the connection
         conn.close()
@@ -36,7 +36,7 @@ def create_table_from_csv():
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
