@@ -36,7 +36,7 @@ with st.sidebar:
             """
         )
         
-    st.caption(f"© Made by CSL_Test 2024. All rights reserved.")
+    st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
 
 def hero(content1, content2):
     st.markdown(f'<h1 style="text-align:center;font-size:60px;border-radius:2%;">'
