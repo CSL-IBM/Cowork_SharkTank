@@ -11,7 +11,7 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Read data from CSV and dynamically create table
-    with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         header = next(csvreader)  # Read header
         columns = ', '.join([f"{col} TEXT" for col in header])
@@ -26,35 +26,23 @@ def create_table_from_csv():
     
     conn.commit()
     conn.close()
+    return header
 
 # Call the function to create the table and import data
-create_table_from_csv()
-
-# Connect to SQLite database
-def get_db_connection():
-    conn = sqlite3.connect('history.db', check_same_thread=False)
-    return conn
+header = create_table_from_csv()
 
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
-    conn = get_db_connection()
+    conn = sqlite3.connect('history.db', check_same_thread=False)
     query = f"SELECT * FROM transactions WHERE {inquiry} ORDER BY InvoiceDate DESC"
-    cursor = conn.execute(query)
-    transactions = cursor.fetchall()
+    transactions = pd.read_sql_query(query, conn)
     conn.close()
-
-    # Convert fetched data into DataFrame
-    df = pd.DataFrame(transactions, columns=header)
-    # Add 1 to index to make it 1-based
-    df.index = df.index + 1
-
-    return df
+    return transactions
 
 # Initialize Streamlit app
 def main():
     st.title('Text-To-Watsonx : Engage AR')
 
-    # Introduction section
     st.markdown("""
         Welcome to the Text-To-Watsonx : Engage AR.
         Here, you can inquire about various aspects of Engage AR transactions.
@@ -87,27 +75,6 @@ def main():
             st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
-    # Custom CSS for table styling
-    st.markdown(
-        """
-        <style>
-        table.dataframe {
-            border: 2px solid #5e5e5e; /* Darker gray than default */
-            text-align: center; /* Center align text in cells */
-        }
-        th {
-            border: 2px solid #5e5e5e; /* Darker gray than default */
-            text-align: center; /* Center align text in header cells */
-        }
-        td {
-            border: 2px solid #5e5e5e; /* Darker gray than default */
-            text-align: center; /* Center align text in data cells */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 
 if __name__ == '__main__':
     main()
