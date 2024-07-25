@@ -1,0 +1,17 @@
+requests==2.30.0
+streamlit==1.24.1
+llama-index==0.8.9
+llama-cpp-python==0.1.9
+nltk==3.8.1
+sentence-transformers>=2.2.2
+huggingface-hub==0.16.4
+ibm-watson-machine-learning>=1.0.320
+langchain==0.0.262
+pydantic>=1.10.0
+streamlit-option-menu==0.1.2
+streamlit-extras==0.2.7
+torch>=1.0.0
+protobuf<5,>=3.20
+pytz==2023.3.post1
+langchain-experimental
+
