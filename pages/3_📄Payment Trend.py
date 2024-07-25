@@ -24,6 +24,11 @@ def create_table_from_csv():
     with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         csv_header = next(csvreader)  # Read the CSV header
+        
+        # Debugging: Print the CSV header
+        st.write("CSV Header:", csv_header)
+        st.write("Expected Header:", header)
+        
         if csv_header != header:
             raise ValueError("CSV header does not match the defined header.")
 
