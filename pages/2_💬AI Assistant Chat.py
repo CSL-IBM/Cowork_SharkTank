@@ -6,18 +6,12 @@ import os
 
 st.set_page_config(layout="wide")
 
-# Function to create SQLite table and import data from CSV
-def create_table_from_csv():
-    file_path = '/mnt/data/transactions_EnageAR&Contract.csv'
-    
-    if not os.path.exists(file_path):
-        st.error(f"File not found: {file_path}")
-        return
-    
-    conn = sqlite3.connect('history.db')
-    c = conn.cursor()
-    
-    # Create the transactions table if it doesn't exist
+
+# Read data from CSV and insert into SQLite table
+with open('transactions_EnageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    csvreader = csv.reader(csvfile)
+    next(csvreader)  # Skip header
+for row in csvreader:
     c.execute('''CREATE TABLE IF NOT EXISTS transactions (
                  No INTEGER,
                  Category TEXT,
