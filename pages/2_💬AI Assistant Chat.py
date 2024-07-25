@@ -31,7 +31,11 @@ def create_table_from_csv():
     try:
         with open('transactions_EngageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
             csvreader = csv.reader(csvfile)
-            next(csvreader)  # Skip header
+            header = next(csvreader)  # Read header
+            if len(header) != 13:
+                st.error(f"CSV file should have 13 columns, but it has {len(header)} columns.")
+                return
+            
             for row in csvreader:
                 if len(row) == 13:
                     c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
@@ -89,7 +93,7 @@ def main():
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
         "Category = 'Green' GROUP BY Collector",
-        "CustomerNumber = 123456"  # New example inquiry added here
+        "CustomerNumber = 734469"  # New example inquiry added here
     ]
     
     st.markdown("**Example Inquiries:**")
