@@ -2,7 +2,6 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import csv
-import webbrowser
 
 st.set_page_config(layout="wide")
 
@@ -88,10 +87,8 @@ def main():
             if "InvoiceNumber" in inquiry:
                 if not transactions.empty:
                     link = transactions.iloc[0]['Link']
-                    invoice_number = transactions.iloc[0]['InvoiceNumber']
-                    st.markdown(f"**InvoiceNumber: {invoice_number}**")
-                    if st.button(f"Open Link for {invoice_number}"):
-                        webbrowser.open_new_tab(link)
+                    st.markdown(f"**InvoiceNumber: {transactions.iloc[0]['InvoiceNumber']}**")
+                    st.markdown(f"[Click here to open link]({link})")
                 else:
                     st.markdown("No results found for the given InvoiceNumber.")
         except Exception as e:
