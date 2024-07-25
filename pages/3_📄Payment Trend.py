@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 def create_table_from_csv():
     try:
         # Load data from the uploaded CSV file
-        df = pd.read_csv('/mnt/data/transactions_Payment.csv')
+        df = pd.read_csv('transactions_Payment.csv')
 
         # Only select necessary columns to avoid unnamed columns
         df = df[['CustomerNumber', 'CustomerName', 'InvoiceNumber', 'InvoiceAmount', 'InvoiceDate', 'DueDate', 'PaymentTime', 'RepNo']]
