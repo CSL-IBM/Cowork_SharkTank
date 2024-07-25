@@ -37,7 +37,7 @@ info = {
    "Pronoun": "her", 
    "Subject": "she", 
    "Name": "Vicky",
-   "Full_Name":"TTW_AskAR", 
+   "Full_Name":"TTS_AskAR", 
    "Intro": "Text-To-SQL : Korea AR Team_SharkTank Challenge",
    "About":"Hello, It's a testbed(🛠️🛏️).",
    "Project":"https://author.skills.network/instructors/vicky_kuo",
