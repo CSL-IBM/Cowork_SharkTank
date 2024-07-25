@@ -66,7 +66,7 @@ def plot_hourly_distribution(transactions):
 
 # Initialize Streamlit app
 def main():
-    st.title('Text-To-Watsonx : Engage AR')
+    st.title('Text-To-SQL : Payment Trend')
 
     st.markdown("""
         Text-To-Watsonx : Engage AR에 오신 것을 환영합니다.
