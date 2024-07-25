@@ -17,9 +17,8 @@ def create_table_from_csv():
     c = conn.cursor()
 
     # Create table dynamically based on specified header
-    columns = ', '.join([f'"{col}" TEXT' for col in header])
-    print(f"Creating table with columns: {columns}")  # Print columns for debugging
-    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_Payment ({columns})''')
+    columns = ', '.join([f"{col} TEXT" for col in header])
+    c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
     with open('transactions_Payment.csv', 'r', newline='', encoding='utf-8') as csvfile:
@@ -27,12 +26,11 @@ def create_table_from_csv():
         next(csvreader)  # Skip header in the CSV file
         
         # Insert CSV data into the table
-        for i, row in enumerate(csvreader):
+        for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
                 c.execute(f'INSERT INTO transactions_Payment VALUES ({placeholders})', row)
             else:
-                print(f"Row {i} length ({len(row)}) does not match header length ({len(header)}): {row}")
                 raise ValueError("Number of columns in the row does not match the header length.")
     
     conn.commit()
