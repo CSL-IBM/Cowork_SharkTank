@@ -30,7 +30,7 @@ def create_table_from_csv():
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
-                c.execute(f'INSERT INTO transactions VALUES ({placeholders})', row)
+                c.execute(f'INSERT INTO transactions_EngageAR&Contract VALUES ({placeholders})', row)
             else:
                 raise ValueError("Number of columns in the row does not match the header length.")
     
@@ -43,7 +43,7 @@ create_table_from_csv()
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    query = f"SELECT * FROM transactions_EngageAR&Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
