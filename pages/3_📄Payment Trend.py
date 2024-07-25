@@ -35,7 +35,7 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "CustomerNumber == '843937'",
+        "CustomerNumber = '843937'",
     ]
     
     st.markdown("**Example Inquiries:**")
