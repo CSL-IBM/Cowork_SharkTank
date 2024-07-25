@@ -38,7 +38,7 @@ info = {
    "Subject": "she", 
    "Name": "Vicky",
    "Full_Name":"TTW_AskAR", 
-   "Intro": "Text-To-Watsonx(SQL) : AskAR at 2024 IBMer watsonx Challenge",
+   "Intro": "Text-To-SQL : Korea AR Team_SharkTank Challenge",
    "About":"Hello, It's a testbed(🛠️🛏️).",
    "Project":"https://author.skills.network/instructors/vicky_kuo",
    "Medium":"https://medium.com/@vicky-note/about",
