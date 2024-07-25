@@ -12,6 +12,7 @@ def create_table_from_csv():
     
     # Create the transactions table if it doesn't exist
     c.execute('''CREATE TABLE IF NOT EXISTS transactions (
+                 No INTEGER,
                  Category TEXT,
                  CustomerName TEXT,
                  CustomerNumber INTEGER,
@@ -21,15 +22,17 @@ def create_table_from_csv():
                  DueDate TEXT,
                  ForecastCode TEXT,
                  ForecastDate TEXT,
-                 Collector TEXT
+                 Collector TEXT,
+                 ContractNo TEXT,
+                 Link TEXT
                  )''')
 
     # Read data from CSV and insert into SQLite table
-    with open('transactions_EnageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EnageAR&Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header
         for row in csvreader:
-            c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
+            c.execute('INSERT INTO transactions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', row)
     
     conn.commit()
     conn.close()
@@ -51,8 +54,8 @@ def fetch_transactions(inquiry):
     conn.close()
 
     # Convert fetched data into DataFrame
-    df = pd.DataFrame(transactions, columns=['Category', 'CustomerName', 'CustomerNumber', 'InvoiceNumber', 'InvoiceAmount',
-                                             'InvoiceDate', 'DueDate', 'ForecastCode', 'ForecastDate', 'Collector'])
+    df = pd.DataFrame(transactions, columns=['No', 'Category', 'CustomerName', 'CustomerNumber', 'InvoiceNumber', 'InvoiceAmount',
+                                             'InvoiceDate', 'DueDate', 'ForecastCode', 'ForecastDate', 'Collector', 'ContractNo', 'Link'])
     # Add 1 to index to make it 1-based
     df.index = df.index + 1
 
