@@ -12,6 +12,14 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
+# Function to display the table based on the inquiry
+def display_table(transactions):
+    if transactions.empty:
+        st.markdown("**No transactions found for the given inquiry.**")
+    else:
+        st.markdown("**Filtered Transactions:**")
+        st.dataframe(transactions)
+
 # Initialize Streamlit app
 def main():
     st.title('Text-To-Watsonx : Engage AR')
@@ -26,7 +34,7 @@ def main():
     # Example inquiries section
     example_inquiries = [
         "CustomerNumber = '843937'",
-]
+    ]
     
     st.markdown("**Example Inquiries:**")
     selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
@@ -38,8 +46,7 @@ def main():
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
-            st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions)
+            display_table(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
