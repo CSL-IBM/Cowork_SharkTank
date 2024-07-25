@@ -67,7 +67,8 @@ def main():
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector"
+        "Category = 'Green' GROUP BY Collector",
+        "InvoiceNumber = 'GP9904'"
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -81,7 +82,15 @@ def main():
         try:
             transactions = fetch_transactions(inquiry)
             st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions)
+            st.dataframe(transactions, use_container_width=True)
+            
+            if "InvoiceNumber" in inquiry:
+                for _, row in transactions.iterrows():
+                    invoice_number = row['InvoiceNumber']
+                    link = row['Link']
+                    st.markdown(f"**InvoiceNumber: {invoice_number}**")
+                    if st.button(f"Open Link for {invoice_number}"):
+                        st.write(f"[Click here to open link]( {link})")
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
