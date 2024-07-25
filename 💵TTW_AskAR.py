@@ -1,22 +1,23 @@
-# import the Streamlit library
 import streamlit as st
 from streamlit_option_menu import option_menu
-from utils.constants import *
+from utils.constants import info
+import streamlit.components.v1 as components
+from PIL import Image
 
-# configure page settings
-st.set_page_config(page_title='Template' ,layout="wide",initial_sidebar_state="auto", page_icon='👧🏻') # always show the sidebar
+# Configure page settings
+st.set_page_config(page_title='Template', layout="wide", initial_sidebar_state="auto", page_icon='👧🏻')
 
-# load local CSS styles
+# Load local CSS styles
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
         
 local_css("styles/styles_main.css")
 
-# get the variables from constants.py
+# Get the variables from constants.py
 pronoun = info['Pronoun']
 
-# app sidebar (좌측 메뉴 하단)
+# App sidebar (좌측 메뉴 하단)
 with st.sidebar:
     st.markdown("""
                 # FAQ
@@ -37,8 +38,6 @@ with st.sidebar:
         
     st.caption(f"© Made by CSL_Test 2024. All rights reserved.")
 
-import requests
-
 def hero(content1, content2):
     st.markdown(f'<h1 style="text-align:center;font-size:60px;border-radius:2%;">'
                 f'<span>{content1}</span><br>'
@@ -46,7 +45,7 @@ def hero(content1, content2):
                 unsafe_allow_html=True)
 
 with st.container():
-    col1,col2 = st.columns([8,3])
+    col1, col2 = st.columns([8, 3])
 
 full_name = info['Full_Name']
 with col1:
@@ -55,7 +54,7 @@ with col1:
     st.write(info['About'])
 
     from streamlit_extras.switch_page_button import switch_page
-    col_1, col_2, col_3 temp = st.columns([0.4,0.2,0.4])
+    col_1, col_2, col_3 = st.columns([0.4, 0.2, 0.4])
     with col_1:
         btn1 = st.button("AskEngageAR")
         if btn1:
@@ -65,12 +64,9 @@ with col1:
         if btn2:
             switch_page("Contract Information")
     with col_3:
-        btn2 = st.button("Payment Trend")
-        if btn2:
+        btn3 = st.button("Payment Trend")
+        if btn3:
             switch_page("Payment Trend")
-
-
-import streamlit.components.v1 as components
 
 def change_button_color(widget_label, background_color='transparent'):
     htmlstr = f"""
@@ -87,15 +83,13 @@ def change_button_color(widget_label, background_color='transparent'):
 
 change_button_color('Chat with My AI Assistant', '#0cc789') 
 
-from  PIL import Image
 with col2:
     profile = Image.open("images/profile.png")
     st.image(profile, width=280)
 
-       
 st.write("---")
 with st.container():  
-    col1,col2,col3 = st.columns([0.475, 0.475, 0.05])
+    col1, col2, col3 = st.columns([0.475, 0.475, 0.05])
         
     with col1:
         st.subheader("👄 Coworker Endorsements")
@@ -152,15 +146,15 @@ with st.container():
         <body>
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                <img src={endorsements["img1"]} style="width:100%">
+                <img src={info["endorsements"]["img1"]} style="width:100%">
                 </div>
 
                 <div class="mySlides fade">
-                <img src={endorsements["img2"]} style="width:100%">
+                <img src={info["endorsements"]["img2"]} style="width:100%">
                 </div>
 
                 <div class="mySlides fade">
-                <img src={endorsements["img3"]} style="width:100%">
+                <img src={info["endorsements"]["img3"]} style="width:100%">
                 </div>
 
             </div>
@@ -215,7 +209,7 @@ with st.container():
 
             """,
                 height=270,
-    )
+        )
 
     with col2:
         st.subheader("📨 Contact Me")
