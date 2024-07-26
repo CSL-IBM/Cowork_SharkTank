@@ -102,12 +102,11 @@ def main():
             
             if show_buttons:
                 # Display buttons with images for each link
-                cols = st.columns(len(transactions))
-                for idx, link in enumerate(transactions['Link']):
-                    cols[idx].markdown(
-                        f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>', 
-                        unsafe_allow_html=True
-                    )
+                buttons_html = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">'
+                for link in transactions['Link']:
+                    buttons_html += f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>'
+                buttons_html += '</div>'
+                st.markdown(buttons_html, unsafe_allow_html=True)
             
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
