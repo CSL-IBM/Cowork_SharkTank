@@ -3,7 +3,6 @@ import sqlite3
 import pandas as pd
 import csv
 
-st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
