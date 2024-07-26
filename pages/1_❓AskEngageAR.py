@@ -25,7 +25,7 @@ def create_table_from_csv():
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
-    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
@@ -125,4 +125,8 @@ def main():
 if __name__ == '__main__':
     main()
 
-st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.") 
+st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+
+# Trigger app reset on page navigation
+if st.experimental_get_query_params():
+    st.experimental_rerun()
