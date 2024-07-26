@@ -58,11 +58,11 @@ def fetch_transactions(inquiry):
 
 # Initialize Streamlit app
 def main():
-    st.title('Text-To-SQL : Engage AR')
+    st.title('Text-To-SQL : Contract Information')
 
     st.markdown("""
         Welcome to Text-To-SQL.  
-        Here, you can inquire about various aspects of Engage AR transactions.  
+        Here, you can inquire about various aspects of Contract Information.  
         Use Example Inquiries to refer to the question format.  
         
         **Important** : Modify the parts marked with **''** to get the answers you want.  
@@ -73,16 +73,8 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "Category = 'Green' GROUP BY Collector",
-        "CustomerNumber = '988587'",
-        "InvoiceAmount > '50000000'",
-        "ForecastCode = 'AUTO' GROUP BY Collector",
-        "ForecastDate > DATE('now')",
-        "DueDate > DATE('now')",
-        "DueDate > '2024-08-10'",
-        "Collector = 'Lisa' AND Category = 'Yellow'",
-        "Collector = 'David' AND ForecastCode = 'AUTO'",
-        "Collector = 'John' AND ForecastDate > '2024-08-01'",
+        "InvoiceNumber = 'DR1259'",  # Added example for InvoiceNumber inquiry
+        "InvoiceNumber = 'DR1259, MO9787, HN9454, CB0369, GI2442'"  # Added example for InvoiceNumber inquiry
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -91,45 +83,38 @@ def main():
     # Form for inquiry submission
     inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
-    # Initialize session state for transactions
-    if 'transactions' not in st.session_state:
-        st.session_state['transactions'] = pd.DataFrame()
-        st.session_state['submitted'] = False  # Add a flag to track if submit button was pressed
-
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
+            # Special handling for InvoiceNumber inquiry
+            show_buttons = False
+            if "InvoiceNumber =" in inquiry:
+                show_buttons = True
+                invoice_numbers = inquiry.split('=')[1].strip().replace("'", "").split(',')
+                invoice_numbers = [num.strip() for num in invoice_numbers]
+                formatted_invoice_numbers = ', '.join([f"'{num}'" for num in invoice_numbers])
+                inquiry = f"InvoiceNumber IN ({formatted_invoice_numbers})"
+                
             transactions = fetch_transactions(inquiry)
-            st.session_state['transactions'] = transactions
-            st.session_state['transactions'].index = st.session_state['transactions'].index + 1  # Change index to start from 1
-            st.session_state['submitted'] = True  # Set the flag to True when submit button is pressed
-        except Exception as e:
-            st.markdown(f"**Error occurred:** {str(e)}")
+            transactions.index = transactions.index + 1  # Change index to start from 1
 
-    # Only show the table and sorting buttons if transactions are available and submit button was pressed
-    if st.session_state['submitted']:
-        if not st.session_state['transactions'].empty:
-            st.markdown("**Additional Sorting Options:**")
-            col1, col2 = st.columns(2)
+            st.markdown("**🔗 Go to Sirion**")
             
-            with col1:
-                if st.button('Sort by InvoiceAmount (Descending)'):
-                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='InvoiceAmount', ascending=False)
-            
-            with col2:
-                if st.button('Sort by DueDate (Ascending)'):
-                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='DueDate', ascending=True)
+            if show_buttons:
+                # Display buttons with images for each link
+                buttons_html = '<div style="display: flex; flex-wrap: wrap; gap: 5px;">'
+                for link in transactions['Link']:
+                    buttons_html += f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>'
+                buttons_html += '</div><br>'
+                st.markdown(buttons_html, unsafe_allow_html=True)
             
             st.markdown("**Filtered Transactions:**")
-            st.dataframe(st.session_state['transactions'])
+            st.dataframe(transactions)
+            
+        except Exception as e:
+            st.markdown(f"**Error occurred:** {str(e)}")
 
 if __name__ == '__main__':
     main()
 
 st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
-
-# Reset the app when the page is navigated
-if st.experimental_get_query_params():
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.experimental_rerun()
