@@ -58,13 +58,15 @@ def fetch_transactions(inquiry):
 
 # Initialize Streamlit app
 def main():
-    st.title('Text-To-Watsonx : Engage AR')
+    st.title('Text-To-SQL : Engage AR')
 
     st.markdown("""
-        Welcome to the Text-To-Watsonx : Engage AR.
+        Welcome to Text-To-SQL.
         Here, you can inquire about various aspects of Engage AR transactions.
-        Use the example queries as a guide to format your questions.
-        **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
+        Use Example Inquiries to refer to the question format.
+        Important: Modify the parts marked with '' to get the answers you want.
+        The system operates by converting your text inquiries into SQL statements and matching them with linked data in the repository to respond.
+        **Note: This prompt uses fictional data, and the customer and invoice information used are fictitious creations.**
     """)
 
     # Example inquiries section
