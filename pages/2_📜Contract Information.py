@@ -106,7 +106,7 @@ def main():
                 for link in transactions['Link']:
                     buttons_html += f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>'
                 buttons_html += '</div>'
-                st.markdown(buttons_html, unsafe_allow_html=True)
+                st.markdown(buttons_html, unsafe_allow_html=True)  
             
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
