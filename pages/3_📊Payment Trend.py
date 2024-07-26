@@ -35,9 +35,8 @@ def create_table_from_csv():
 
         # Close the connection
         conn.close()
-        #st.success("테이블이 생성되고 데이터가 성공적으로 가져왔습니다.")
-    #except Exception as e:
-        #st.error(f"테이블 생성 또는 데이터 가져오기 중 오류 발생: {str(e)}")
+    except Exception as e:
+        st.error(f"테이블 생성 또는 데이터 가져오기 중 오류 발생: {str(e)}")
 
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
