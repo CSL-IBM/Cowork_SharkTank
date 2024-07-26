@@ -90,7 +90,6 @@ with col2:
 endorsements = {
     "img1": "https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/git_background_1.png",
     "img2": "https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/git_background_2.png",
-    "img3": "https://user-images.githubusercontent.com/90204593/238171242-53f7ceb3-1a71-4726-a7f5-67721419fef8.png"
 }
        
 st.write("---")
@@ -159,15 +158,10 @@ with st.container():
                 <img src={endorsements["img2"]} style="width:100%">
                 </div>
 
-                <div class="mySlides fade">
-                <img src={endorsements["img3"]} style="width:100%">
-                </div>
-
             </div>
             <br>
 
             <div style="text-align:center">
-                <span class="dot"></span> 
                 <span class="dot"></span> 
                 <span class="dot"></span> 
             </div>
