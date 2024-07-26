@@ -23,4 +23,4 @@ USER myuser
 ENTRYPOINT ["streamlit", "run"]
 
 # Specify the default Streamlit application script to run
-CMD ["👋 TTS_AskAR.py"]
+CMD ["👋TTS_AskAR.py"]
