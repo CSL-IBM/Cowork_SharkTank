@@ -42,7 +42,10 @@ def create_table_from_csv():
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    if inquiry == "CustomerNumber = 'ALL'" or inquiry == "CustomerNumber = '*'":
+        query = "SELECT * FROM transactions_Payment ORDER BY InvoiceDate DESC"
+    else:
+        query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
@@ -86,6 +89,7 @@ def main():
     # 예제 질의 섹션
     example_inquiries = [
         "CustomerNumber = '843937'",
+        "CustomerNumber = 'ALL'",
     ]
     
     st.markdown("**예제 질의:**")
