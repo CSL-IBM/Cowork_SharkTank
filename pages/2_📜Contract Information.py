@@ -73,7 +73,7 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "InvoiceNumber = 'DR1259'"  # Added example for InvoiceNumber inquiry
+        "InvoiceNumber = 'DR1259'"  # Added example for InvoiceNumber inquiry  
         "InvoiceNumber = 'DR1259, MO9787, HN9454, CB0369, GI2442'"  # Added example for InvoiceNumber inquiry
     ]
     
