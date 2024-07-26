@@ -97,7 +97,7 @@ with st.container():
     col1,col2,col3 = st.columns([0.475, 0.475, 0.05])
         
     with col1:
-        st.subheader("👄 Coworker Endorsements")
+        st.subheader("💵 Korea ART")
         components.html(
         f"""
         <!DOCTYPE html>
