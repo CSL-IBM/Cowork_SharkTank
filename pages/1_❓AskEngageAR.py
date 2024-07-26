@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
-    "No", "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
+    "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "ForecastCode", 
     "ForecastDate", "Collector", "ContractNo", "Link"
 ]
@@ -16,6 +16,9 @@ header = [
 def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
+
+    # Drop the table if it exists to avoid schema mismatch
+    c.execute('DROP TABLE IF EXISTS transactions_EngageAR_Contract')
 
     # Create table dynamically based on specified header
     columns = ', '.join([f"{col} TEXT" for col in header])
@@ -30,8 +33,13 @@ def create_table_from_csv():
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
-                c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+                try:
+                    c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+                except sqlite3.OperationalError as e:
+                    st.write(f"Error inserting row: {row}")
+                    st.write(e)
             else:
+                st.write(f"Row length mismatch: {row}")
                 raise ValueError("Number of columns in the row does not match the header length.")
     
     conn.commit()
@@ -80,6 +88,7 @@ def main():
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
+            transactions.index = transactions.index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
         except Exception as e:
