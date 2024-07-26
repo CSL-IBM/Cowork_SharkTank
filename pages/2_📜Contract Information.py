@@ -87,7 +87,7 @@ def main():
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
-            # Special handling for InvoiceNumber inquiry
+            # Special handling for InvoiceNumber and ContractNo inquiries
             show_buttons = False
             if "InvoiceNumber =" in inquiry:
                 show_buttons = True
@@ -95,6 +95,10 @@ def main():
                 invoice_numbers = [num.strip() for num in invoice_numbers]
                 formatted_invoice_numbers = ', '.join([f"'{num}'" for num in invoice_numbers])
                 inquiry = f"InvoiceNumber IN ({formatted_invoice_numbers})"
+            elif "ContractNo =" in inquiry:
+                show_buttons = True
+                contract_no = inquiry.split('=')[1].strip().replace("'", "")
+                inquiry = f"ContractNo = '{contract_no}'"
                 
             transactions = fetch_transactions(inquiry)
             transactions.index = transactions.index + 1  # Change index to start from 1
