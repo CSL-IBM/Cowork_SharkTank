@@ -114,5 +114,18 @@ def main():
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
+    # CSS to fix the width of the Streamlit page
+    st.markdown(
+        """
+        <style>
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 if __name__ == '__main__':
     main()
