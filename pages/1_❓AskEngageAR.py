@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import csv
+import re
 
 st.set_page_config(layout="wide")
 
@@ -48,6 +49,15 @@ def create_table_from_csv():
 # Call the function to create the table and import data
 create_table_from_csv()
 
+# Function to convert natural language inquiry into SQL condition
+def convert_to_sql_condition(natural_language_query):
+    # Simple conversion for "category is green" format
+    match = re.match(r"show the transactions where the '(\w+)' is '(\w+)'", natural_language_query, re.IGNORECASE)
+    if match:
+        column, value = match.groups()
+        return f"{column} = '{value}'"
+    return natural_language_query  # Fallback to return the original query if it doesn't match
+
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
@@ -73,28 +83,31 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "Category = 'Green'",
-        "CustomerNumber = '988587'",
-        "InvoiceAmount > '50000000'",
-        "ForecastCode = 'AUTO' GROUP BY Collector",
-        "ForecastDate > 'DATE('now')'",
-        "DueDate > DATE('now')",
-        "DueDate > '2024-08-10'",
-        "Collector = 'Lisa' AND Category = 'Yellow'",
-        "Collector = 'David' AND ForecastCode = 'AUTO'",
-        "Collector = 'John' AND ForecastDate > '2024-08-01'",
+        "Show the transactions where the 'Category' is 'Green'",
+        "Show the transactions where the 'CustomerNumber' is '988587'",
+        "Show the transactions where the 'InvoiceAmount' is greater than '50000000'",
+        "Show the transactions where the 'ForecastCode' is 'AUTO' GROUP BY Collector",
+        "Show the transactions where the 'ForecastDate' is greater than 'DATE('now')'",
+        "Show the transactions where the 'DueDate' is greater than DATE('now')",
+        "Show the transactions where the 'DueDate' is greater than '2024-08-10'",
+        "Show the transactions where the 'Collector' is 'Lisa' and the 'Category' is 'Yellow'",
+        "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
+        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-08-01'",
     ]
     
     st.markdown("**Example Inquiries:**")
     selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
 
     # Form for inquiry submission
-    inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
+    natural_language_inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
+
+    # Convert the natural language inquiry to SQL condition
+    sql_condition = convert_to_sql_condition(natural_language_inquiry)
 
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
-            transactions = fetch_transactions(inquiry)
+            transactions = fetch_transactions(sql_condition)
             transactions.index = transactions.index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
