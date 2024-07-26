@@ -107,26 +107,23 @@ def main():
             st.markdown(f"**Error occurred:** {str(e)}")
 
     # Only show the table and sorting buttons if transactions are available and submit button was pressed
-    if st.session_state['submitted'] and not st.session_state['transactions'].empty:
-        st.markdown("**Additional Sorting Options:**")
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            if st.button('Sort by InvoiceAmount (Descending)'):
-                st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='InvoiceAmount', ascending=False)
-        
-        with col2:
-            if st.button('Sort by DueDate (Ascending)'):
-                st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='DueDate', ascending=True)
-        
-        st.markdown("**Filtered Transactions:**")
-        st.dataframe(st.session_state['transactions'])
+    if st.session_state['submitted']:
+        if not st.session_state['transactions'].empty:
+            st.markdown("**Additional Sorting Options:**")
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                if st.button('Sort by InvoiceAmount (Descending)'):
+                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='InvoiceAmount', ascending=False)
+            
+            with col2:
+                if st.button('Sort by DueDate (Ascending)'):
+                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='DueDate', ascending=True)
+            
+            st.markdown("**Filtered Transactions:**")
+            st.dataframe(st.session_state['transactions'])
 
 if __name__ == '__main__':
     main()
 
 st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
-
-# Trigger app reset on page navigation
-if st.experimental_get_query_params():
-    st.experimental_rerun()
