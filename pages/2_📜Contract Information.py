@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
-    "No", "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
+    "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "ForecastCode", 
     "ForecastDate", "Collector", "ContractNo", "Link"
 ]
