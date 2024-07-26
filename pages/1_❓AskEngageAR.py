@@ -77,7 +77,7 @@ def main():
         "CustomerNumber = '988587'",
         "InvoiceAmount > '50000000'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
-        "ForecastDate > DATE('now')",
+        "ForecastDate > 'DATE('now')'",
         "DueDate > DATE('now')",
         "DueDate > '2024-08-10'",
         "Collector = 'Lisa' AND Category = 'Yellow'",
@@ -91,45 +91,17 @@ def main():
     # Form for inquiry submission
     inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
-    # Initialize session state for transactions
-    if 'transactions' not in st.session_state:
-        st.session_state['transactions'] = pd.DataFrame()
-        st.session_state['submitted'] = False  # Add a flag to track if submit button was pressed
-
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
-            st.session_state['transactions'] = transactions
-            st.session_state['transactions'].index = st.session_state['transactions'].index + 1  # Change index to start from 1
-            st.session_state['submitted'] = True  # Set the flag to True when submit button is pressed
+            transactions.index = transactions.index + 1  # Change index to start from 1
+            st.markdown("**Filtered Transactions:**")
+            st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
-    # Only show the table and sorting buttons if transactions are available and submit button was pressed
-    if st.session_state['submitted']:
-        if not st.session_state['transactions'].empty:
-            st.markdown("**Additional Sorting Options:**")
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                if st.button('Sort by InvoiceAmount (Descending)'):
-                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='InvoiceAmount', ascending=False)
-            
-            with col2:
-                if st.button('Sort by DueDate (Ascending)'):
-                    st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='DueDate', ascending=True)
-            
-            st.markdown("**Filtered Transactions:**")
-            st.dataframe(st.session_state['transactions'])
 
 if __name__ == '__main__':
     main()
 
 st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
-
-# Reset the app when the page is navigated
-query_params = st.experimental_get_query_params()
-if query_params:
-    st.session_state.clear()
-    st.experimental_rerun()
