@@ -73,13 +73,16 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
+        "Category = 'Green' GROUP BY Collector",
+        "CustomerNumber = '988587'",
+        "InvoiceAmount > '50000000'",
+        "ForecastCode = 'AUTO' GROUP BY Collector",
+        "ForecastDate > 'DATE('now')'",
         "DueDate > DATE('now')",
+        "DueDate > '2024-08-10'",
         "Collector = 'Lisa' AND Category = 'Yellow'",
         "Collector = 'David' AND ForecastCode = 'AUTO'",
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
-        "ForecastCode = 'AUTO' GROUP BY Collector",
-        "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector"
     ]
     
     st.markdown("**Example Inquiries:**")
