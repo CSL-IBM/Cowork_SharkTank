@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import csv
 
+st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
@@ -112,19 +113,6 @@ def main():
             
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
-    # CSS to fix the width of the Streamlit page
-    st.markdown(
-        """
-        <style>
-        .main {
-            max-width: 2400px;
-            margin: 0 auto;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 
 if __name__ == '__main__':
     main()
