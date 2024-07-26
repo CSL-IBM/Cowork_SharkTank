@@ -75,7 +75,8 @@ def main():
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector"
+        "Category = 'Green' GROUP BY Collector",
+        "InvoiceNumber = 'DR1259'"  # Added example for InvoiceNumber inquiry
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -87,10 +88,22 @@ def main():
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
+            # Special handling for InvoiceNumber inquiry
+            if "InvoiceNumber =" in inquiry:
+                invoice_numbers = inquiry.split('=')[1].strip().replace("'", "").split(',')
+                invoice_numbers = [num.strip() for num in invoice_numbers]
+                formatted_invoice_numbers = ', '.join([f"'{num}'" for num in invoice_numbers])
+                inquiry = f"InvoiceNumber IN ({formatted_invoice_numbers})"
+                
             transactions = fetch_transactions(inquiry)
             transactions.index = transactions.index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
+            
+            # Display buttons with images for each link
+            for link in transactions['Link']:
+                st.markdown(f"[![button](images/SL-logo_New.png)]({link})")
+            
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
