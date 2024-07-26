@@ -116,3 +116,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
