@@ -73,14 +73,8 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "DueDate > DATE('now')",
-        "Collector = 'Lisa' AND Category = 'Yellow'",
-        "Collector = 'David' AND ForecastCode = 'AUTO'",
-        "Collector = 'John' AND ForecastDate > '2024-08-01'",
-        "ForecastCode = 'AUTO' GROUP BY Collector",
-        "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector",
         "InvoiceNumber = 'DR1259'"  # Added example for InvoiceNumber inquiry
+        "InvoiceNumber = 'DR1259, MO9787, HN9454, CB0369, GI2442'"  # Added example for InvoiceNumber inquiry
     ]
     
     st.markdown("**Example Inquiries:**")
