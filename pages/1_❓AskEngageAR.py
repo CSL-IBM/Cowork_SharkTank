@@ -91,28 +91,32 @@ def main():
     # Form for inquiry submission
     inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
+    # Initialize session state for transactions
+    if 'transactions' not in st.session_state:
+        st.session_state['transactions'] = pd.DataFrame()
+
     # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
-            transactions.index = transactions.index + 1  # Change index to start from 1
+            st.session_state['transactions'] = transactions
+            st.session_state['transactions'].index = st.session_state['transactions'].index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions)
-            
-            # Add sorting buttons
-            if not transactions.empty:
-                st.markdown("**Additional Sorting Options:**")
-                
-                if st.button('Sort by InvoiceAmount (Descending)'):
-                    transactions = transactions.sort_values(by='InvoiceAmount', ascending=False)
-                    st.dataframe(transactions)
-                
-                if st.button('Sort by DueDate (Ascending)'):
-                    transactions = transactions.sort_values(by='DueDate', ascending=True)
-                    st.dataframe(transactions)
-        
+            st.dataframe(st.session_state['transactions'])
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
+
+    # Add sorting buttons if transactions are available
+    if not st.session_state['transactions'].empty:
+        st.markdown("**Additional Sorting Options:**")
+        
+        if st.button('Sort by InvoiceAmount (Descending)'):
+            st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='InvoiceAmount', ascending=False)
+            st.dataframe(st.session_state['transactions'])
+        
+        if st.button('Sort by DueDate (Ascending)'):
+            st.session_state['transactions'] = st.session_state['transactions'].sort_values(by='DueDate', ascending=True)
+            st.dataframe(st.session_state['transactions'])
 
 if __name__ == '__main__':
     main()
