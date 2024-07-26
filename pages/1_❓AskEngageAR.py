@@ -77,7 +77,7 @@ def main():
         "CustomerNumber = '988587'",
         "InvoiceAmount > '50000000'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
-        "ForecastDate > 'DATE('now')'",
+        "ForecastDate > DATE('now')",
         "DueDate > DATE('now')",
         "DueDate > '2024-08-10'",
         "Collector = 'Lisa' AND Category = 'Yellow'",
@@ -98,6 +98,19 @@ def main():
             transactions.index = transactions.index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
+            
+            # Add sorting buttons
+            if not transactions.empty:
+                st.markdown("**Additional Sorting Options:**")
+                
+                if st.button('Sort by InvoiceAmount (Descending)'):
+                    transactions = transactions.sort_values(by='InvoiceAmount', ascending=False)
+                    st.dataframe(transactions)
+                
+                if st.button('Sort by DueDate (Ascending)'):
+                    transactions = transactions.sort_values(by='DueDate', ascending=True)
+                    st.dataframe(transactions)
+        
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
