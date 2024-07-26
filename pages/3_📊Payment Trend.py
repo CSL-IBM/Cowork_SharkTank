@@ -91,6 +91,10 @@ def main():
     st.markdown("**예제 질의:**")
     selected_inquiry = st.selectbox("예제 질의를 선택하세요:", example_inquiries)
 
+    st.markdown("""
+        CustomerNumber : 843937, 553924, 496375, 609764, 603966, 404658, 955732, 926432, 850024, 949725
+    """)
+
     # 질의 제출 양식
     inquiry = st.text_input('질의를 제출하세요:', selected_inquiry)
 
@@ -102,7 +106,7 @@ def main():
                 max_hour, max_count = plot_hourly_distribution(transactions)
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
-                result_message = f"가장 많은 count를 가진 Hour는 {max_hour}시이며, 총 건수는 {max_count}건 입니다. 따라서, {max_hour}시 전후로 대금 지급이 확인되지 않는 경우에는 고객에게 contact 하시는 것을 추천드립니다."
+                result_message = f"가장 많은 count를 가진 Hour는 {max_hour}시이며, 총 건수는 {max_count}건 입니다. 따라서, {max_hour}시까지 대금 지급이 확인되지 않는 경우에는 고객에게 contact 하시는 것을 추천드립니다."
                 st.markdown(f'<div style="background-color: #d3d3d3; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
                 
                 st.markdown("**필터링된 트랜잭션:**")
