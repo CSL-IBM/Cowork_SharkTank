@@ -118,7 +118,10 @@ def main():
                 max_hour, max_count = plot_hourly_distribution(transactions)
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
-                result_message = f"The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions. Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock."
+                result_message = f"""
+                The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions.
+                Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
+                """
                 st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
 
                 st.markdown("**Filtered Transactions:**")
