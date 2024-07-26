@@ -98,7 +98,7 @@ def main():
             transactions = fetch_transactions(inquiry)
             transactions.index = transactions.index + 1  # Change index to start from 1
 
-            st.markdown("**↱ Go to Sirion**")
+            st.markdown("**  ↱ Go to Sirion**")
             
             if show_buttons:
                 # Display buttons with images for each link
