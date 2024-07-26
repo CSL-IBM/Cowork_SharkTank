@@ -17,13 +17,6 @@ local_css("styles/styles_main.css")
 # Get the variables from constants.py
 pronoun = info['Pronoun']
 
-# App sidebar (좌측 메뉴 하단)
-with st.sidebar:
-    st.markdown("""
-                # Sidebar Menu
-                """)
-    # 사이드바 메뉴 추가 가능
-
 def hero(content1, content2):
     st.markdown(f'<h1 style="text-align:center;font-size:60px;border-radius:2%;">'
                 f'<span>{content1}</span><br>'
@@ -210,3 +203,4 @@ with st.container():
             <button type="submit">Send</button>
         </form>
         """
+    st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
