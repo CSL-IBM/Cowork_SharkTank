@@ -25,7 +25,7 @@ def create_table_from_csv():
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
-    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
@@ -104,7 +104,7 @@ def main():
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
-    # Add sorting buttons if transactions are available
+    # Only show the table and sorting buttons if transactions are available
     if not st.session_state['transactions'].empty:
         st.markdown("**Additional Sorting Options:**")
         col1, col2 = st.columns(2)
