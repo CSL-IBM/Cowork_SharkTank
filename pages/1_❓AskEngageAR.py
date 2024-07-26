@@ -127,3 +127,9 @@ if __name__ == '__main__':
     main()
 
 st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+
+# Reset the app when the page is navigated
+if st.experimental_get_query_params():
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
