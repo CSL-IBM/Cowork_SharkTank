@@ -51,12 +51,35 @@ create_table_from_csv()
 
 # Function to convert natural language inquiry into SQL condition
 def convert_to_sql_condition(natural_language_query):
-    # Simple conversion for "category is green" format
-    match = re.match(r"show the transactions where the '(\w+)' is '(\w+)'", natural_language_query, re.IGNORECASE)
-    if match:
-        column, value = match.groups()
+    # Define regex patterns for different types of queries
+    equality_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)'", re.IGNORECASE)
+    greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
+    date_greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
+    date_literal_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
+    group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
+    and_condition_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is '(\w+)'", re.IGNORECASE)
+    
+    # Match the query with patterns and convert to SQL condition
+    if equality_pattern.match(natural_language_query):
+        column, value = equality_pattern.findall(natural_language_query)[0]
         return f"{column} = '{value}'"
-    return natural_language_query  # Fallback to return the original query if it doesn't match
+    elif greater_than_pattern.match(natural_language_query):
+        column, value = greater_than_pattern.findall(natural_language_query)[0]
+        return f"{column} > '{value}'"
+    elif date_greater_than_pattern.match(natural_language_query):
+        column = date_greater_than_pattern.findall(natural_language_query)[0]
+        return f"{column} > DATE('now')"
+    elif date_literal_pattern.match(natural_language_query):
+        column, date = date_literal_pattern.findall(natural_language_query)[0]
+        return f"{column} > '{date}'"
+    elif group_by_pattern.match(natural_language_query):
+        column, value, group_by = group_by_pattern.findall(natural_language_query)[0]
+        return f"{column} = '{value}' GROUP BY {group_by}"
+    elif and_condition_pattern.match(natural_language_query):
+        column1, value1, column2, value2 = and_condition_pattern.findall(natural_language_query)[0]
+        return f"{column1} = '{value1}' AND {column2} = '{value2}'"
+    else:
+        return natural_language_query  # Fallback to return the original query if it doesn't match
 
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
@@ -86,8 +109,8 @@ def main():
         "Show the transactions where the 'Category' is 'Green'",
         "Show the transactions where the 'CustomerNumber' is '988587'",
         "Show the transactions where the 'InvoiceAmount' is greater than '50000000'",
-        "Show the transactions where the 'ForecastCode' is 'AUTO' GROUP BY Collector",
-        "Show the transactions where the 'ForecastDate' is greater than 'DATE('now')'",
+        "Show the transactions where the 'ForecastCode' is 'AUTO'",
+        "Show the transactions where the 'ForecastDate' is greater than DATE('now')",
         "Show the transactions where the 'DueDate' is greater than DATE('now')",
         "Show the transactions where the 'DueDate' is greater than '2024-08-10'",
         "Show the transactions where the 'Collector' is 'Lisa' and the 'Category' is 'Yellow'",
