@@ -73,7 +73,7 @@ def main():
 
     # Example inquiries section
     example_inquiries = [
-        "Category = 'Green' GROUP BY Collector",
+        "Category = 'Green'",
         "CustomerNumber = '988587'",
         "InvoiceAmount > '50000000'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
