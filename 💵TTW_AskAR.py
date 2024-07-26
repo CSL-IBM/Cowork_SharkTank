@@ -20,23 +20,9 @@ pronoun = info['Pronoun']
 # App sidebar (좌측 메뉴 하단)
 with st.sidebar:
     st.markdown("""
-                # FAQ
+                # Sidebar Menu
                 """)
-    with st.expander("Click here to see FAQs"):
-        st.info(
-            f"""
-            - What are the items with a due date after today??
-            - Show me the list where the collector is Lisa and the category is Yellow!
-            - Show me the list where the collector is David and the forecast code is AUTO!
-            - Show me the list where the collector is John and the forecast date is after August!
-            - How many AUTO in Forecastcode per collector?
-            - How many invoice numbers with due date greater than August 10th 2024?
-            - How many green per collector in category??
-            - ++++++++++++++TBD++++++++++++++
-            """
-        )
-        
-    st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+    # 사이드바 메뉴 추가 가능
 
 def hero(content1, content2):
     st.markdown(f'<h1 style="text-align:center;font-size:60px;border-radius:2%;">'
@@ -224,4 +210,3 @@ with st.container():
             <button type="submit">Send</button>
         </form>
         """
-        st.markdown(contact_form, unsafe_allow_html=True)
