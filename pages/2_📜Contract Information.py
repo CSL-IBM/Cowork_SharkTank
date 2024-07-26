@@ -27,12 +27,17 @@ def create_table_from_csv():
         next(csvreader)  # Skip header in the CSV file
         
         # Insert CSV data into the table
+        row_count = 0
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
                 c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+                row_count += 1
             else:
                 raise ValueError("Number of columns in the row does not match the header length.")
+        
+        if row_count != 200:
+            raise ValueError(f"Expected 200 lines of data, but got {row_count}.")
     
     conn.commit()
     conn.close()
