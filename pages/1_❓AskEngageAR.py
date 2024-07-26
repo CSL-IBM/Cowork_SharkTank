@@ -25,7 +25,7 @@ def create_table_from_csv():
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
-    with open('/mnt/data/transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
