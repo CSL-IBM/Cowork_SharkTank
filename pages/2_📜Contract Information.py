@@ -88,6 +88,7 @@ def main():
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
+            transactions.index = transactions.index + 1  # Change index to start from 1
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
         except Exception as e:
