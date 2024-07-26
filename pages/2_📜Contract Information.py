@@ -21,23 +21,21 @@ def create_table_from_csv():
     columns = ', '.join([f"{col} TEXT" for col in header])
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
+    # Clear existing data
+    c.execute('DELETE FROM transactions_EngageAR_Contract')
+
     # Read data from CSV and insert into table
-    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('/mnt/data/transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
         # Insert CSV data into the table
-        row_count = 0
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
                 c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
-                row_count += 1
             else:
                 raise ValueError("Number of columns in the row does not match the header length.")
-        
-        if row_count != 100:
-            raise ValueError(f"Expected 100 lines of data, but got {row_count}.")
     
     conn.commit()
     conn.close()
@@ -72,8 +70,7 @@ def main():
         "Collector = 'John' AND ForecastDate > '2024-08-01'",
         "ForecastCode = 'AUTO' GROUP BY Collector",
         "DueDate > '2024-08-10'",
-        "Category = 'Green' GROUP BY Collector",
-        "InvoiceNumber = 'GP9904'"
+        "Category = 'Green' GROUP BY Collector"
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -87,15 +84,7 @@ def main():
         try:
             transactions = fetch_transactions(inquiry)
             st.markdown("**Filtered Transactions:**")
-            st.dataframe(transactions, use_container_width=True)
-            
-            if "InvoiceNumber" in inquiry:
-                if not transactions.empty:
-                    link = transactions.iloc[0]['Link']
-                    st.markdown(f"**InvoiceNumber: {transactions.iloc[0]['InvoiceNumber']}**")
-                    st.markdown(f"[Click here to open link]({link})")
-                else:
-                    st.markdown("No results found for the given InvoiceNumber.")
+            st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
