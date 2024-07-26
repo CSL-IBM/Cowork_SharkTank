@@ -100,18 +100,18 @@ def main():
         "CustomerNumber = 'ALL'",
     ]
     
-    st.markdown("**예제 질의:**")
-    selected_inquiry = st.selectbox("예제 질의를 선택하세요:", example_inquiries)
+    st.markdown("**Example Inquiries:**")
+    selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
 
     st.markdown("""
         CustomerNumber : 843937, 553924, 496375, 609764, 603966, 404658, 955732, 926432, 850024, 949725
     """)
 
     # 질의 제출 양식
-    inquiry = st.text_input('질의를 제출하세요:', selected_inquiry)
+    inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
     # 질의에 따른 트랜잭션 테이블 표시
-    if st.button('제출'):
+    if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
             if not transactions.empty:
