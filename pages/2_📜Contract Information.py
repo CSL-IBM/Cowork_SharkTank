@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
-    "No", "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
+    "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "ForecastCode", 
     "ForecastDate", "Collector", "ContractNo", "Link"
 ]
@@ -25,7 +25,7 @@ def create_table_from_csv():
     c.execute('DELETE FROM transactions_EngageAR_Contract')
 
     # Read data from CSV and insert into table
-    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open('https://raw.githubusercontent.com/your-repo/your-path/transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
