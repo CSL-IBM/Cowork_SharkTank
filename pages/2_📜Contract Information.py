@@ -17,12 +17,12 @@ def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
 
+    # Drop the table if it exists to avoid schema mismatch
+    c.execute('DROP TABLE IF EXISTS transactions_EngageAR_Contract')
+
     # Create table dynamically based on specified header
     columns = ', '.join([f"{col} TEXT" for col in header])
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
-
-    # Clear existing data
-    c.execute('DELETE FROM transactions_EngageAR_Contract')
 
     # Read data from CSV and insert into table
     with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
