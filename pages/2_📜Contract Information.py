@@ -89,7 +89,9 @@ def main():
     if st.button('Submit'):
         try:
             # Special handling for InvoiceNumber inquiry
+            show_buttons = False
             if "InvoiceNumber =" in inquiry:
+                show_buttons = True
                 invoice_numbers = inquiry.split('=')[1].strip().replace("'", "").split(',')
                 invoice_numbers = [num.strip() for num in invoice_numbers]
                 formatted_invoice_numbers = ', '.join([f"'{num}'" for num in invoice_numbers])
@@ -97,15 +99,17 @@ def main():
                 
             transactions = fetch_transactions(inquiry)
             transactions.index = transactions.index + 1  # Change index to start from 1
+            
+            if show_buttons:
+                # Display buttons with images for each link
+                for link in transactions['Link']:
+                    st.markdown(
+                        f'<a href="{link}" target="_blank"><img src="https://github.com/CSL-IBM/Cowork_SharkTank/blob/30f9fff78442267ca14b69d8f52af724e910a37d/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>', 
+                        unsafe_allow_html=True
+                    )
+            
             st.markdown("**Filtered Transactions:**")
             st.dataframe(transactions)
-            
-            # Display buttons with images for each link
-            for link in transactions['Link']:
-                st.markdown(
-                    f'<a href="{link}" target="_blank"><img src="https://github.com/CSL-IBM/Cowork_SharkTank/blob/30f9fff78442267ca14b69d8f52af724e910a37d/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>', 
-                    unsafe_allow_html=True
-                )
             
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
