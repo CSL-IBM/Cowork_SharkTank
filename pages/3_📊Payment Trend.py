@@ -82,10 +82,14 @@ def main():
     st.title('Text-To-SQL : Payment Trend')
 
     st.markdown("""
-        Text-To-Watsonx : Engage AR에 오신 것을 환영합니다.
-        여기서 Engage AR 트랜잭션에 대해 다양한 사항을 문의할 수 있습니다.
-        예제 질의를 사용하여 질문 형식을 참고하세요.
-        **중요: AI 응답은 다양할 수 있으며, 더 나은 결과를 위해 프롬프트 템플릿이나 LLM을 미세 조정해야 할 수도 있습니다.**
+        Welcome to Text-To-SQL.  
+        Here, you can inquire about various aspects of Payment Trend.  
+        Use Example Inquiries to refer to the question format.  
+        
+        **Important** : Modify the parts marked with **''** to get the answers you want.  
+        The system operates by converting your text inquiries into SQL statements and matching them with linked data in the repository to respond.  
+
+        **Note: This prompt uses fictional data, and the customer and invoice information used are fictitious creations.**
     """)
 
     # 테이블을 생성하고 데이터를 가져오는 함수 호출
