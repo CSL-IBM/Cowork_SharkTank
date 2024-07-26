@@ -127,7 +127,7 @@ def main():
                 st.markdown("**Filtered Transactions:**")
                 st.dataframe(transactions)
             else:
-                st.markdown("**주어진 질의에 대한 트랜잭션이 없습니다.**")
+                st.markdown("**There are no transactions for the given inquiry.**")
         except Exception as e:
             st.markdown(f"**오류 발생:** {str(e)}")
 
