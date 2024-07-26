@@ -48,8 +48,7 @@ def fetch_transactions(inquiry):
         query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
-    return transactions
-    transactions.index = transactions.index + 1  # 인덱스를 1부터 시작하도록 변경
+    transactions.index = transactions.index + 1  # Change index to start from 1
     return transactions
 
 # Function to plot bar chart of PaymentTime hours
