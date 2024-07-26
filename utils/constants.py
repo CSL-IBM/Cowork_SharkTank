@@ -34,16 +34,16 @@ chat = {
 }
 
 info = {
-   "Pronoun": "her", 
-   "Subject": "she", 
-   "Name": "Vicky",
+   "Pronoun": "*", 
+   "Subject": "*", 
+   "Name": "*",
    "Full_Name":"TTS_AskAR", 
    "Intro": "Text-To-SQL : Korea AR Team_SharkTank Challenge",
    "About":"Hello, It's a testbed(🛠️🛏️).",
-   "Project":"https://author.skills.network/instructors/vicky_kuo",
-   "Medium":"https://medium.com/@vicky-note/about",
-   "City":"Toronto, Canada",
-   "Resume": "https://drive.google.com/file/d/1e_trgOgzwYIY6eMSvjmyjgqBcCOdueZ1/view?usp=sharing",
+   "Project":"*",
+   "Medium":"*",
+   "City":"*",
+   "Resume": "*",
    "Email": "changsup.lim1@ibm.com" 
 }
 
