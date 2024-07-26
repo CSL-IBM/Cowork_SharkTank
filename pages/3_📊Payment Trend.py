@@ -51,7 +51,7 @@ def fetch_transactions(inquiry):
     
     # Convert CustomerNumber to string and remove commas
     transactions['CustomerNumber'] = transactions['CustomerNumber'].astype(str).str.replace(',', '')
-    
+        
     transactions.index = transactions.index + 1  # Change index to start from 1
     return transactions
 
@@ -119,10 +119,7 @@ def main():
                 st.markdown(f'<div style="background-color: #d3d3d3; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
                 
                 st.markdown("**필터링된 트랜잭션:**")
-                styled_transactions = transactions.style.set_table_styles(
-                    [{'selector': 'th, td', 'props': [('text-align', 'center')]}]
-                ).set_properties(**{'text-align': 'center'})
-                st.write(styled_transactions.render(), unsafe_allow_html=True)
+                st.dataframe(transactions)
             else:
                 st.markdown("**주어진 질의에 대한 트랜잭션이 없습니다.**")
         except Exception as e:
