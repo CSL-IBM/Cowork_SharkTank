@@ -102,7 +102,7 @@ def main():
             
             if show_buttons:
                 # Display buttons with images for each link
-                buttons_html = '<div style="display: flex; flex-wrap: wrap; gap: 2px;">'
+                buttons_html = '<div style="display: flex; flex-wrap: wrap; gap: 5px;">'
                 for link in transactions['Link']:
                     buttons_html += f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>'
                 buttons_html += '</div>'
