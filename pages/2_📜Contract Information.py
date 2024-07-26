@@ -22,12 +22,12 @@ def create_table_from_csv():
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
 
     # Read data from CSV and insert into table
-    row_count = 0
     with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip header in the CSV file
         
         # Insert CSV data into the table
+        row_count = 0
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
@@ -35,10 +35,9 @@ def create_table_from_csv():
                 row_count += 1
             else:
                 raise ValueError("Number of columns in the row does not match the header length.")
-            st.write(f"Read row {row_count}: {row}")
         
-        if row_count != 200:
-            raise ValueError(f"Expected 200 lines of data, but got {row_count}.")
+        if row_count != 100:
+            raise ValueError(f"Expected 100 lines of data, but got {row_count}.")
     
     conn.commit()
     conn.close()
