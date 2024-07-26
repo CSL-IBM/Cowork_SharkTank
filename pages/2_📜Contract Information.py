@@ -2,19 +2,18 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import csv
-from io import StringIO
 
 st.set_page_config(layout="wide")
 
 # 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
-    "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
+    "No", "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "ForecastCode", 
     "ForecastDate", "Collector", "ContractNo", "Link"
 ]
 
 # Function to create SQLite table and import data from CSV
-def create_table_from_csv(csvfile):
+def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
 
@@ -26,21 +25,31 @@ def create_table_from_csv(csvfile):
     c.execute('DELETE FROM transactions_EngageAR_Contract')
 
     # Read data from CSV and insert into table
-    csvreader = csv.reader(csvfile)
-    next(csvreader)  # Skip header in the CSV file
-
-    row_count = 0
-    for row in csvreader:
-        if len(row) == len(header):
-            placeholders = ', '.join(['?' for _ in row])
-            c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
-            row_count += 1
-        else:
-            st.error(f"Row {row_count} has {len(row)} columns, expected {len(header)}")
-            raise ValueError("Number of columns in the row does not match the header length.")
+    with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
+        csvreader = csv.reader(csvfile)
+        next(csvreader)  # Skip header in the CSV file
+        
+        # Insert CSV data into the table
+        for row in csvreader:
+            if len(row) == len(header):
+                placeholders = ', '.join(['?' for _ in row])
+                c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+            else:
+                raise ValueError("Number of columns in the row does not match the header length.")
     
     conn.commit()
     conn.close()
+
+# Call the function to create the table and import data
+create_table_from_csv()
+
+# Function to fetch transactions based on the inquiry
+def fetch_transactions(inquiry):
+    conn = sqlite3.connect('history.db', check_same_thread=False)
+    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    transactions = pd.read_sql_query(query, conn)
+    conn.close()
+    return transactions
 
 # Initialize Streamlit app
 def main():
@@ -52,16 +61,6 @@ def main():
         Use the example queries as a guide to format your questions.
         **Important: AI responses can vary, you might need to fine-tune your prompt template or LLM for improved results.**
     """)
-
-    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
-
-    if uploaded_file is not None:
-        try:
-            csvfile = StringIO(uploaded_file.getvalue().decode("utf-8"))
-            create_table_from_csv(csvfile)
-            st.success("CSV file successfully uploaded and processed.")
-        except Exception as e:
-            st.error(f"Error processing CSV file: {str(e)}")
 
     # Example inquiries section
     example_inquiries = [
@@ -88,14 +87,6 @@ def main():
             st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
-# Function to fetch transactions based on the inquiry
-def fetch_transactions(inquiry):
-    conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
-    transactions = pd.read_sql_query(query, conn)
-    conn.close()
-    return transactions
 
 if __name__ == '__main__':
     main()
