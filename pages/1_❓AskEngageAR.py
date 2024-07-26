@@ -131,6 +131,5 @@ st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
 # Reset the app when the page is navigated
 query_params = st.experimental_get_query_params()
 if query_params:
-    for key in st.session_state.keys():
-        del st.session_state[key]
+    st.session_state.clear()
     st.experimental_rerun()
