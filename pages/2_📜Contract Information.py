@@ -102,7 +102,10 @@ def main():
             
             # Display buttons with images for each link
             for link in transactions['Link']:
-                st.markdown(f"[![button](images/SL-logo_New.png)]({link})")
+                st.markdown(
+                    f'<a href="{link}" target="_blank"><img src="https://github.com/CSL-IBM/Cowork_SharkTank/blob/30f9fff78442267ca14b69d8f52af724e910a37d/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>', 
+                    unsafe_allow_html=True
+                )
             
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
