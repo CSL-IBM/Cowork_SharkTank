@@ -94,10 +94,11 @@ endorsements = {
        
 st.write("---")
 with st.container():  
-    col1,col2,col3 = st.columns([0.475, 0.475, 0.05])
-        
+    col1, col2 = st.columns([0.5, 0.5])
+    
     with col1:
         st.subheader("💵 Korea ART")
+        st.write("https://w3.ibm.com/w3publisher/artkorea")  # 추가된 텍스트
         components.html(
         f"""
         <!DOCTYPE html>
