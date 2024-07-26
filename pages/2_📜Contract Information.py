@@ -33,8 +33,13 @@ def create_table_from_csv():
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
-                c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+                try:
+                    c.execute(f'INSERT INTO transactions_EngageAR_Contract VALUES ({placeholders})', row)
+                except sqlite3.OperationalError as e:
+                    st.write(f"Error inserting row: {row}")
+                    st.write(e)
             else:
+                st.write(f"Row length mismatch: {row}")
                 raise ValueError("Number of columns in the row does not match the header length.")
     
     conn.commit()
