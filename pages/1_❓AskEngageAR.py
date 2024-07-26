@@ -56,21 +56,6 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
-# Reset state function
-def reset_state():
-    for key in st.session_state.keys():
-        del st.session_state[key]
-
-# Check for page change
-if 'last_page' not in st.session_state:
-    st.session_state['last_page'] = ''
-
-current_page = st.sidebar.selectbox("Navigate", ["Home", "TTS AskAR", "AskEngageAR", "Contract Information", "Payment Trend"])
-if st.session_state['last_page'] != current_page:
-    reset_state()
-    st.session_state['last_page'] = current_page
-    st.experimental_rerun()
-
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Engage AR')
@@ -138,7 +123,13 @@ def main():
             st.markdown("**Filtered Transactions:**")
             st.dataframe(st.session_state['transactions'])
 
-if current_page == "❓AskEngageAR":
+if __name__ == '__main__':
     main()
 
 st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+
+# Reset the app when the page is navigated
+if st.experimental_get_query_params():
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
