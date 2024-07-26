@@ -49,6 +49,8 @@ def fetch_transactions(inquiry):
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
+    transactions.index = transactions.index + 1  # 인덱스를 1부터 시작하도록 변경
+    return transactions
 
 # Function to plot bar chart of PaymentTime hours
 def plot_hourly_distribution(transactions):
