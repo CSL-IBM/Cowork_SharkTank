@@ -203,4 +203,7 @@ with st.container():
             <button type="submit">Send</button>
         </form>
         """
-    st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+        st.markdown(contact_form, unsafe_allow_html=True)
+
+# 캡션 텍스트를 맨 아래에 배치
+st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
