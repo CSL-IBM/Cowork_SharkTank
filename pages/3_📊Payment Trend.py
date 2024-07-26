@@ -64,6 +64,11 @@ def plot_hourly_distribution(transactions):
     ax.set_xticks(range(0, 24))
     st.pyplot(fig)
 
+    # Return the hour with the maximum count
+    max_hour = hour_counts.idxmax()
+    max_count = hour_counts.max()
+    return max_hour, max_count
+
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Payment Trend')
@@ -98,7 +103,10 @@ def main():
                 st.dataframe(transactions)
 
                 # 시간대별 결제 수를 시각화
-                plot_hourly_distribution(transactions)
+                max_hour, max_count = plot_hourly_distribution(transactions)
+
+                # 텍스트 결과 출력
+                st.markdown(f"가장 많은 count를 가진 Hour는 {max_hour}시이며, 총 건수는 {max_count}건 입니다. 따라서, {max_hour}시까지 대금 지급이 확인되지 않는 경우에는 고객에게 contact 하시는 것을 추천드립니다.")
             else:
                 st.markdown("**주어진 질의에 대한 트랜잭션이 없습니다.**")
         except Exception as e:
