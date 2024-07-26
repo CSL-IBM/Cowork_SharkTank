@@ -94,6 +94,7 @@ def main():
     # Initialize session state for transactions
     if 'transactions' not in st.session_state:
         st.session_state['transactions'] = pd.DataFrame()
+        st.session_state['submitted'] = False  # Add a flag to track if submit button was pressed
 
     # Display transactions table based on the inquiry
     if st.button('Submit'):
@@ -101,11 +102,12 @@ def main():
             transactions = fetch_transactions(inquiry)
             st.session_state['transactions'] = transactions
             st.session_state['transactions'].index = st.session_state['transactions'].index + 1  # Change index to start from 1
+            st.session_state['submitted'] = True  # Set the flag to True when submit button is pressed
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
-    # Only show the table and sorting buttons if transactions are available
-    if not st.session_state['transactions'].empty:
+    # Only show the table and sorting buttons if transactions are available and submit button was pressed
+    if st.session_state['submitted'] and not st.session_state['transactions'].empty:
         st.markdown("**Additional Sorting Options:**")
         col1, col2 = st.columns(2)
         
