@@ -48,6 +48,10 @@ def fetch_transactions(inquiry):
         query = f"SELECT * FROM transactions_Payment WHERE {inquiry} ORDER BY InvoiceDate DESC"
     transactions = pd.read_sql_query(query, conn)
     conn.close()
+    
+    # Convert CustomerNumber to string and remove commas
+    transactions['CustomerNumber'] = transactions['CustomerNumber'].astype(str).str.replace(',', '')
+        
     transactions.index = transactions.index + 1  # Change index to start from 1
     return transactions
 
