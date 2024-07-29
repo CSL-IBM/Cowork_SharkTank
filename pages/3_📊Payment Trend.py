@@ -127,6 +127,7 @@ def main():
     # 예제 질의 섹션
     example_inquiries = [
         "CustomerNumber = '843937'",
+        "CustomerNumber = '843937' and '603966'",
         "CustomerNumber = 'ALL'",
     ]
     
@@ -155,7 +156,7 @@ def main():
                     mode_difference = plot_kde_differences(transactions)
                 
                 # 투명한 긴 섹션 추가
-                st.markdown("<div style='height: 1px;'></div>", unsafe_allow_html=True)
+                st.markdown("<div style='height: 0.5px;'></div>", unsafe_allow_html=True)
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message_bar = f"""
