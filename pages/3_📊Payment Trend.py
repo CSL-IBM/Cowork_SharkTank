@@ -157,6 +157,7 @@ def main():
                     The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions.<br>
                     Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
                     </div>
+                    <div style="height: 1px;"></div>
                     """
                     st.markdown(result_message_bar, unsafe_allow_html=True)
 
@@ -170,6 +171,7 @@ def main():
                     Generally, the difference between the due date and payment date is less than 0.<br>
                     Therefore, it can be observed that this customer tends to pay before the due date.
                     </div>
+                    <div style="height: 1px;"></div>
                     """
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
