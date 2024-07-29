@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Function to create table and import data from CSV
 def create_table_from_csv():
@@ -76,6 +77,24 @@ def plot_hourly_distribution(transactions):
     max_count = hour_counts.max()
     return max_hour, max_count
 
+# Function to plot KDE plot of Payment Date Differences
+def plot_kde_differences(transactions):
+    # Compute the difference between DueDate and PaymentDate
+    transactions['PaymentDate'] = pd.to_datetime(transactions['PaymentTime']).dt.date
+    transactions['DueDate'] = pd.to_datetime(transactions['DueDate'])
+    transactions['PaymentDate'] = pd.to_datetime(transactions['PaymentDate'])
+    transactions['Difference'] = (transactions['PaymentDate'] - transactions['DueDate']).dt.days
+
+    # Filter differences between -30 and 0
+    filtered_df = transactions[(transactions['Difference'] >= -30) & (transactions['Difference'] <= 0)]
+
+    # KDE plot (with histogram)
+    fig, ax = plt.subplots(figsize=(6, 3))
+    sns.histplot(filtered_df['Difference'], kde=True, color='purple', ax=ax)
+    ax.set_title('KDE Plot of Payment Date Differences (-30 to 0)')
+    ax.set_xlabel('Difference (days)')
+    st.pyplot(fig)
+
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Payment Trend')
@@ -123,6 +142,10 @@ def main():
                 Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
                 """
                 st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
+
+                # KDE 플롯 추가
+                st.markdown("**KDE Plot of Payment Date Differences:**")
+                plot_kde_differences(transactions)
 
                 st.markdown("**Filtered Transactions:**")
                 st.dataframe(transactions)
