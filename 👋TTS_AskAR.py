@@ -98,14 +98,15 @@ with st.container():
 
             /* The dots/bullets/indicators */
             .dot {{
-            height: 7.5px;
-            width: 7.5px;
+            height: 15px;
+            width: 15px;
             margin: 0 2px;
             background-color: #eaeaea;
             border-radius: 50%;
             display: inline-block;
             transition: background-color 0.6s ease;
             }}
+
 
             .active {{
             background-color: #6F6F6F;
