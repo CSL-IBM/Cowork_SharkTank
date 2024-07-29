@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Function to create table and import data from CSV
 def create_table_from_csv():
@@ -95,6 +96,11 @@ def plot_kde_differences(transactions):
     ax.set_xlabel('Difference (days)')
     st.pyplot(fig)
 
+    # Find the mode of the difference (most frequent value range)
+    mode_difference = filtered_df['Difference'].mode().values[0]
+
+    return mode_difference
+
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Payment Trend')
@@ -140,15 +146,24 @@ def main():
                 with col1:
                     max_hour, max_count = plot_hourly_distribution(transactions)
 
-                with col2:
-                    plot_kde_differences(transactions)
+                    # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
+                    result_message_bar = f"""
+                    The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions.<br>
+                    Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
+                    """
+                    st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message_bar}</div>', unsafe_allow_html=True)
 
-                # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
-                result_message = f"""
-                The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions.<br>
-                Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
-                """
-                st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
+                with col2:
+                    st.markdown("**KDE Plot of Payment Date Differences:**")
+                    mode_difference = plot_kde_differences(transactions)
+
+                    # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
+                    result_message_kde = f"""
+                    The most frequent range of differences is {mode_difference} days.<br>
+                    Generally, the difference between the due date and payment date is less than 0.<br>
+                    Therefore, it can be observed that this customer tends to pay before the due date.
+                    """
+                    st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message_kde}</div>', unsafe_allow_html=True)
 
                 st.markdown("**Filtered Transactions:**")
                 st.dataframe(transactions)
