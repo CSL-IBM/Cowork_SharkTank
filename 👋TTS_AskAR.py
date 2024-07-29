@@ -131,11 +131,11 @@ with st.container():
         <body>
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                <img src={endorsements["img1"]} style="width:100%">
+                <img src={endorsements["img1"]} style="width:90%">
                 </div>
 
                 <div class="mySlides fade">
-                <img src={endorsements["img2"]} style="width:100%">
+                <img src={endorsements["img2"]} style="width:90%">
                 </div>
 
             </div>
