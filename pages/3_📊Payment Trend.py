@@ -4,6 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Streamlit 페이지 설정
+st.set_page_config(layout="wide")
+
 # Function to create table and import data from CSV
 def create_table_from_csv():
     try:
@@ -64,12 +67,13 @@ def plot_hourly_distribution(transactions):
     hour_counts = transactions['Hour'].value_counts().sort_index()
 
     # Create bar chart
-    fig, ax = plt.subplots(figsize=(6, 6))  # 크기를 동일하게 설정
+    fig, ax = plt.subplots(figsize=(6, 4))  # 크기를 조정함
     ax.bar(hour_counts.index, hour_counts.values, width=0.8)
-    ax.set_xlabel('Hour')
-    ax.set_ylabel('Number of Payments')
-    ax.set_title('Payment Trend')
+    ax.set_xlabel('Hour', fontsize=12)
+    ax.set_ylabel('Number of Payments', fontsize=12)
+    ax.set_title('Payment Trend', fontsize=14)
     ax.set_xticks(range(0, 24))
+    ax.tick_params(axis='both', which='major', labelsize=10)
     st.pyplot(fig)
 
     # Return the hour with the maximum count
@@ -89,10 +93,12 @@ def plot_kde_differences(transactions):
     filtered_df = transactions[(transactions['Difference'] >= -30) & (transactions['Difference'] <= 0)]
 
     # KDE plot (with histogram)
-    fig, ax = plt.subplots(figsize=(6, 6))  # 크기를 동일하게 설정
+    fig, ax = plt.subplots(figsize=(6, 4))
     sns.histplot(filtered_df['Difference'], kde=True, color='purple', ax=ax)
-    ax.set_title('KDE Plot of Payment Date Differences (-30 to 0)')
-    ax.set_xlabel('Difference (days)')
+    ax.set_xlabel('Difference (days)', fontsize=12)
+    ax.set_ylabel('Count', fontsize=12)
+    ax.set_title('KDE Plot of Payment Date Differences (-30 to 0)', fontsize=14)
+    ax.tick_params(axis='both', which='major', labelsize=10)
     st.pyplot(fig)
 
     # Find the mode of the difference (most frequent value range)
@@ -168,7 +174,7 @@ def main():
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
                 st.markdown("**Filtered Transactions:**")
-                st.dataframe(transactions.drop(columns=['PaymentDate']))
+                st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
             else:
                 st.markdown("**There are no transactions for the given inquiry.**")
         except Exception as e:
