@@ -64,7 +64,7 @@ def plot_hourly_distribution(transactions):
     hour_counts = transactions['Hour'].value_counts().sort_index()
 
     # Create bar chart
-    fig, ax = plt.subplots(figsize=(6, 3))  # 크기를 조정함
+    fig, ax = plt.subplots(figsize=(6, 6))  # 크기를 동일하게 설정
     ax.bar(hour_counts.index, hour_counts.values, width=0.8)
     ax.set_xlabel('Hour')
     ax.set_ylabel('Number of Payments')
@@ -89,7 +89,7 @@ def plot_kde_differences(transactions):
     filtered_df = transactions[(transactions['Difference'] >= -30) & (transactions['Difference'] <= 0)]
 
     # KDE plot (with histogram)
-    fig, ax = plt.subplots(figsize=(6, 3))
+    fig, ax = plt.subplots(figsize=(6, 6))  # 크기를 동일하게 설정
     sns.histplot(filtered_df['Difference'], kde=True, color='purple', ax=ax)
     ax.set_title('KDE Plot of Payment Date Differences (-30 to 0)')
     ax.set_xlabel('Difference (days)')
