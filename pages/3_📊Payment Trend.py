@@ -134,7 +134,15 @@ def main():
         try:
             transactions = fetch_transactions(inquiry)
             if not transactions.empty:
-                max_hour, max_count = plot_hourly_distribution(transactions)
+                # 왼쪽과 오른쪽에 나란히 차트를 표시
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    max_hour, max_count = plot_hourly_distribution(transactions)
+
+                with col2:
+                    st.markdown("**KDE Plot of Payment Date Differences:**")
+                    plot_kde_differences(transactions)
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message = f"""
@@ -142,10 +150,6 @@ def main():
                 Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
                 """
                 st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message}</div>', unsafe_allow_html=True)
-
-                # KDE 플롯 추가
-                st.markdown("**KDE Plot of Payment Date Differences:**")
-                plot_kde_differences(transactions)
 
                 st.markdown("**Filtered Transactions:**")
                 st.dataframe(transactions)
