@@ -3,7 +3,6 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
 
 # Function to create table and import data from CSV
 def create_table_from_csv():
@@ -148,21 +147,25 @@ def main():
 
                     # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                     result_message_bar = f"""
+                    <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; height: 100px;">
                     The hour with the highest count is {max_hour} o'clock, with a total of {max_count} transactions.<br>
                     Therefore, it is recommended to contact the customer if payment is not confirmed by {max_hour} o'clock.
+                    </div>
                     """
-                    st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message_bar}</div>', unsafe_allow_html=True)
+                    st.markdown(result_message_bar, unsafe_allow_html=True)
 
                 with col2:
                     mode_difference = plot_kde_differences(transactions)
 
                     # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                     result_message_kde = f"""
+                    <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; height: 100px;">
                     The most frequent range of differences is {mode_difference} days.<br>
                     Generally, the difference between the due date and payment date is less than 0.<br>
                     Therefore, it can be observed that this customer tends to pay before the due date.
+                    </div>
                     """
-                    st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message_kde}</div>', unsafe_allow_html=True)
+                    st.markdown(result_message_kde, unsafe_allow_html=True)
 
                 st.markdown("**Filtered Transactions:**")
                 st.dataframe(transactions)
