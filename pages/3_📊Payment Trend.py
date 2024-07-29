@@ -141,7 +141,6 @@ def main():
                     max_hour, max_count = plot_hourly_distribution(transactions)
 
                 with col2:
-                    st.markdown("**KDE Plot of Payment Date Differences:**")
                     plot_kde_differences(transactions)
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
