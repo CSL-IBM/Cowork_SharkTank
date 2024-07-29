@@ -154,7 +154,6 @@ def main():
                     st.markdown(f'<div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px;">{result_message_bar}</div>', unsafe_allow_html=True)
 
                 with col2:
-                    st.markdown("**KDE Plot of Payment Date Differences:**")
                     mode_difference = plot_kde_differences(transactions)
 
                     # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
