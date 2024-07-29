@@ -97,7 +97,7 @@ def plot_kde_differences(transactions):
     sns.histplot(filtered_df['Difference'], kde=True, color='purple', ax=ax)
     ax.set_xlabel('Difference (days)', fontsize=12)
     ax.set_ylabel('Count', fontsize=12)
-    ax.set_title('KDE Plot of Payment Date Differences (-30 to 0)', fontsize=14)
+    ax.set_title('Payment Date - Due Date', fontsize=14)
     ax.tick_params(axis='both', which='major', labelsize=10)
     st.pyplot(fig)
 
