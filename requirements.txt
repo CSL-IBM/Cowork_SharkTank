@@ -14,4 +14,4 @@ torch>=1.0.0
 protobuf<5,>=3.20
 pytz==2023.3.post1
 langchain-experimental
-
+seaborn
