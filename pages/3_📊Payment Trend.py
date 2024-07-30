@@ -223,4 +223,15 @@ def main():
                 with result_col2:
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
-                line_text = "
+                line_text = "line" if total_lines == 1 else "lines"
+                st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
+                st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
+            else:
+                st.markdown("**There are no transactions for the given inquiry.**")
+        except Exception as e:
+            st.markdown(f"**오류 발생:** {str(e)}")
+
+if __name__ == '__main__':
+    main()
+
+st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
