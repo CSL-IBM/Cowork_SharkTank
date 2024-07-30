@@ -188,7 +188,7 @@ with st.container():
             </html> 
 
             """,
-                height=270,
+                height=300,
     )
 
     with col2:
