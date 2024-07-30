@@ -66,7 +66,7 @@ change_button_color('Chat with My AI Assistant', '#0cc789')
 
 with col2:
     profile = Image.open("images/SharkTank_2.png")
-    st.image(profile, width=350)
+    st.image(profile, width=420)
 
 endorsements = {
     "img1": "https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/git_background_1.png",
