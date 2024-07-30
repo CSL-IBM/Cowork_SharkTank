@@ -32,7 +32,9 @@ with col1:
     st.write("")
     # Modify the font size of the About text here
     st.markdown(f'<div style="font-size:19px;">{info["About"]}</div>', unsafe_allow_html=True)
-
+    
+    # 투명한 긴 섹션 추가
+    st.markdown("<div style='height: 0.5px;'></div>", unsafe_allow_html=True)
 
     from streamlit_extras.switch_page_button import switch_page
     col_1, col_2, col_3 = st.columns([0.3, 0.4, 0.3])
