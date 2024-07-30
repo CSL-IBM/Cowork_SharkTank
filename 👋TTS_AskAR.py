@@ -73,7 +73,7 @@ endorsements = {
        
 st.write("---")
 with st.container():  
-    col0, col1, col2, col3 = st.columns([0.1, 0.5, 0.3, 0.1])
+    col1, col2, col3 = st.columns([0.5, 0.3, 0.2])
     
     with col1:
         st.subheader("💵 Korea ART")
