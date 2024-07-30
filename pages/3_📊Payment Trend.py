@@ -163,7 +163,7 @@ def main():
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message_bar = f"""
                 <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
-                The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total of <strong>{max_count} transactions.</strong><br>
+                The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total({total_lines}) of <strong>{max_count} transactions.</strong><br>
                 Therefore, it is <strong>recommended</strong> to contact the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
                 </div>
                 """
