@@ -7,47 +7,6 @@ import seaborn as sns
 # Streamlit 페이지 설정
 st.set_page_config(layout="wide")
 
-# 사용자 정의 CSS 및 JavaScript 삽입
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: #ffffff;
-    }
-    .markdown-text-box {
-        color: black;
-        background-color: #F0F2F6;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
-    .dark-theme .reportview-container {
-        background: #0e1117;
-    }
-    .dark-theme .markdown-text-box {
-        color: white;
-        background-color: #262730;
-    }
-    </style>
-    <script>
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === "attributes" && mutation.attributeName === "class") {
-                const reportView = document.querySelector('.reportview-container');
-                if (reportView.classList.contains('dark-theme')) {
-                    document.body.classList.add('dark-theme');
-                } else {
-                    document.body.classList.remove('dark-theme');
-                }
-            }
-        });
-    });
-    observer.observe(document.body, { attributes: true });
-    </script>
-    """,
-    unsafe_allow_html=True
-)
-
 # Function to create table and import data from CSV
 def create_table_from_csv():
     try:
@@ -203,13 +162,13 @@ def main():
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message_bar = f"""
-                <div class="markdown-text-box">
+                <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
                 The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total of {total_lines}, including <strong>{max_count} transactions</strong> at that hour.<br>
                 Therefore, it is <strong>recommended to contact</strong> the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
                 </div>
                 """
                 result_message_kde = f"""
-                <div class="markdown-text-box">
+                <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
                 The most frequent range of differences is <strong>{mode_difference} days.</strong><br>
                 Generally, the difference between the due date and payment date is <strong>less than 0</strong>.<br>
                 Therefore, it can be observed that this customer <strong>tends to pay before the due date</strong>.
