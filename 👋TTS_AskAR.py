@@ -31,7 +31,7 @@ with col1:
     hero(f"Hi, I'm {full_name}👋", info["Intro"])
     st.write("")
     # Modify the font size of the About text here
-    st.markdown(f'<div style="font-size:19px;">{info["About"]}</div>', unsafe_allow_html=True)   
+    st.markdown(f'<div style="font-size:19px;">{info["About"]}</div>', unsafe_allow_html=True)</n>
 
 
     from streamlit_extras.switch_page_button import switch_page
