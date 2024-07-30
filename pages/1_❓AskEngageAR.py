@@ -133,7 +133,8 @@ def main():
             transactions = fetch_transactions(sql_condition)
             total_lines = len(transactions)  # Get the total number of lines
             transactions.index = transactions.index + 1  # Change index to start from 1
-            st.markdown(f"**Filtered Transactions: {total_lines} lines**")  # Display the total number of lines
+            line_text = "line" if total_lines == 1 else "lines"
+            st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
             st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
