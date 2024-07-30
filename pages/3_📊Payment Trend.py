@@ -7,6 +7,25 @@ import seaborn as sns
 # Streamlit 페이지 설정
 st.set_page_config(layout="wide")
 
+# 사용자 정의 CSS 삽입
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: #0e1117;
+    }
+    .markdown-text-box {
+        color: white;
+        background-color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Function to create table and import data from CSV
 def create_table_from_csv():
     try:
@@ -162,13 +181,13 @@ def main():
 
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message_bar = f"""
-                <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                <div class="markdown-text-box">
                 The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total of {total_lines}, including <strong>{max_count} transactions</strong> at that hour.<br>
                 Therefore, it is <strong>recommended to contact</strong> the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
                 </div>
                 """
                 result_message_kde = f"""
-                <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                <div class="markdown-text-box">
                 The most frequent range of differences is <strong>{mode_difference} days.</strong><br>
                 Generally, the difference between the due date and payment date is <strong>less than 0</strong>.<br>
                 Therefore, it can be observed that this customer <strong>tends to pay before the due date</strong>.
