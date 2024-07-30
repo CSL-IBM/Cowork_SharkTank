@@ -182,7 +182,8 @@ def main():
                 with result_col2:
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
-                st.markdown(f"**Filtered Transactions: {total_lines} lines**")  # Display the total number of lines
+                line_text = "line" if total_lines == 1 else "lines"
+                st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
                 st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
             else:
                 st.markdown("**There are no transactions for the given inquiry.**")
