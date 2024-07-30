@@ -73,7 +73,7 @@ endorsements = {
        
 st.write("---")
 with st.container():  
-    col1, col2 = st.columns([0.7, 0.3])
+    col0, col1, col2, col3 = st.columns([0.1, 0.5, 0.3, 0.1])
     
     with col1:
         st.subheader("💵 Korea ART")
@@ -92,7 +92,7 @@ with st.container():
             /* Slideshow container */
             .slideshow-container {{
             position: relative;
-            margin: 0 2px;
+            margin: auto;
             width: 100%;
             }}
 
