@@ -139,7 +139,7 @@ with st.container():
                 </div>
 
             </div>
-            <br>
+            
 
             <div style="text-align:center">
                 <span class="dot"></span> 
