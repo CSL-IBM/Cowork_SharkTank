@@ -92,7 +92,7 @@ with st.container():
             /* Slideshow container */
             .slideshow-container {{
             position: relative;
-            margin: auto;
+            margin: 0 2px;
             width: 100%;
             }}
 
