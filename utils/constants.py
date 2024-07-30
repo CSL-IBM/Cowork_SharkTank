@@ -37,7 +37,7 @@ info = {
    "Pronoun": "*", 
    "Subject": "*", 
    "Name": "*",
-   "Full_Name":"TTS_AskAR", 
+   "Full_Name":"TTS AskAR", 
    "Intro": "Text-To-SQL : Korea AR Team_🦈SharkTank Challenge",
    "About": """Hi User, welcome to TTS(Text-To-SQL).<br>
     I'm here to assist you with inquiries regarding <b>EngageAR, Contract Information, and Payment Trend</b>.<br>
