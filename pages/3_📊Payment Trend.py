@@ -145,6 +145,8 @@ def main():
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(inquiry)
+            total_lines = len(transactions)  # Get the total number of lines
+
             if not transactions.empty:
                 # 왼쪽과 오른쪽에 나란히 차트를 표시
                 col1, col2 = st.columns(2)
@@ -180,7 +182,7 @@ def main():
                 with result_col2:
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
-                st.markdown("**Filtered Transactions:**")
+                st.markdown(f"**Filtered Transactions: {total_lines} lines**")  # Display the total number of lines
                 st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
             else:
                 st.markdown("**There are no transactions for the given inquiry.**")
