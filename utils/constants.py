@@ -43,7 +43,7 @@ info = {
     I'm here to assist you with inquiries regarding <b>EngageAR, Contract Information, and Payment Trend</b>.<br>
     You can get started by selecting the button below. If you want more information about our team, click the <b>💵Korea ART link</b>.<br>
     Additionally, if you have any ideas or suggestions about this TTS, feel free to reach out to us using the <b>📨Contact Me</b>.<br>
-    Thank you!☺️<br>""",
+    Thank you!☺️""",
    "Project":"*",
    "Medium":"*",
    "City":"*",
