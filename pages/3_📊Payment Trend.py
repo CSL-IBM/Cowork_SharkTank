@@ -164,7 +164,7 @@ def main():
                 result_message_bar = f"""
                 <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
                 The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total of {total_lines}, including <strong>{max_count} transactions</strong> at that hour.<br>
-                Therefore, it is <strong>recommended</strong> to contact the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
+                Therefore, it is <strong>recommended to contact</strong> the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
                 </div>
                 """
                 result_message_kde = f"""
