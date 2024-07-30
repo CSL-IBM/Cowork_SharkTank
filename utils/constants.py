@@ -40,9 +40,9 @@ info = {
    "Full_Name":"TTS_AskAR", 
    "Intro": "Text-To-SQL : Korea AR Team_SharkTank Challenge",
    "About": """Hi User, welcome to TTS(Text-To-SQL).  
-    I'm here to assist you with inquiries regarding **EngageAR, Contract Information, and Payment Trend**. You can get started by selecting the button below.  
-    If you want more information about our team, click the Korea ART link.  
-    Additionally, if you have any ideas or suggestions about this TTS, feel free to reach out to us using the Contact Me.  
+    I'm here to assist you with inquiries regarding **EngageAR, Contract Information, and Payment Trend**.  
+    You can get started by selecting the button below. If you want more information about our team, click the **Korea ART link**.  
+    Additionally, if you have any ideas or suggestions about this TTS, feel free to reach out to us using the **Contact Me**.  
     Thank you!☺️""",
    "Project":"*",
    "Medium":"*",
