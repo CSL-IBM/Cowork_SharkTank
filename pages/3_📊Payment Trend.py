@@ -161,15 +161,15 @@ def main():
                 # 텍스트 결과 출력 (회색 배경의 텍스트 박스)
                 result_message_bar = f"""
                 <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
-                The hour with the highest count is <strong>{max_hour}</strong> o'clock, with a total of <strong>{max_count}</strong> transactions.<br>
-                <u>Therefore, it is recommended to contact the customer if payment is not confirmed by <strong>{max_hour}</strong> o'clock.</u>
+                The hour with the highest count is <strong>{max_hour} o'clock</strong>, with a total of <strong>{max_count} transactions.</strong><br>
+                Therefore, it is <strong>recommended</strong> to contact the customer if payment is <strong>not confirmed by {max_hour} o'clock.</strong>
                 </div>
                 """
                 result_message_kde = f"""
                 <div style="background-color: #F0F2F6; padding: 10px; border-radius: 5px; margin-top: 10px;">
-                The most frequent range of differences is <strong>{mode_difference}</strong> days.<br>
+                The most frequent range of differences is <strong>{mode_difference} days.</strong><br>
                 Generally, the difference between the due date and payment date is <strong>less than 0</strong>.<br>
-                <u>Therefore, it can be observed that this customer tends to pay <strong>before the due date</strong>.</u>
+                Therefore, it can be observed that this customer <strong>tends to pay before the due date</strong>.
                 </div>
                 """
                 
