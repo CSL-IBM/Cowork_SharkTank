@@ -26,7 +26,7 @@ st.markdown(
     }
     .dark-theme .markdown-text-box {
         color: white;
-        background-color: #333;
+        background-color: #262730;
     }
     </style>
     <script>
