@@ -113,9 +113,9 @@ def main():
                     buttons_html += f'<a href="{link}" target="_blank"><img src="https://raw.githubusercontent.com/CSL-IBM/Cowork_SharkTank/main/images/SL-logo_New.png" alt="button" style="width:50px;height:50px;"></a>'
                 buttons_html += '</div><br>'
                 st.markdown(buttons_html, unsafe_allow_html=True)
-
+            
             line_text = "line" if total_lines == 1 else "lines"
-            st.markdown(f"**Filtered Transactions: {total_lines} lines**")  # Display the total number of lines
+            st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
             st.dataframe(transactions)
             
         except Exception as e:
