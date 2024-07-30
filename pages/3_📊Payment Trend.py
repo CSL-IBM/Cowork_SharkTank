@@ -7,21 +7,43 @@ import seaborn as sns
 # Streamlit 페이지 설정
 st.set_page_config(layout="wide")
 
-# 사용자 정의 CSS 삽입
+# 사용자 정의 CSS 및 JavaScript 삽입
 st.markdown(
     """
     <style>
     .reportview-container {
-        background: #0e1117;
+        background: #ffffff;
     }
     .markdown-text-box {
-        color: white;
-        background-color: #333;
+        color: black;
+        background-color: #F0F2F6;
         padding: 10px;
         border-radius: 5px;
         margin-top: 10px;
     }
+    .dark-theme .reportview-container {
+        background: #0e1117;
+    }
+    .dark-theme .markdown-text-box {
+        color: white;
+        background-color: #333;
+    }
     </style>
+    <script>
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === "attributes" && mutation.attributeName === "class") {
+                const reportView = document.querySelector('.reportview-container');
+                if (reportView.classList.contains('dark-theme')) {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+            }
+        });
+    });
+    observer.observe(document.body, { attributes: true });
+    </script>
     """,
     unsafe_allow_html=True
 )
@@ -201,15 +223,4 @@ def main():
                 with result_col2:
                     st.markdown(result_message_kde, unsafe_allow_html=True)
 
-                line_text = "line" if total_lines == 1 else "lines"
-                st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
-                st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
-            else:
-                st.markdown("**There are no transactions for the given inquiry.**")
-        except Exception as e:
-            st.markdown(f"**오류 발생:** {str(e)}")
-
-if __name__ == '__main__':
-    main()
-
-st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
+                line_text = "
