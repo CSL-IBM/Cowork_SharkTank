@@ -131,8 +131,9 @@ def main():
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(sql_condition)
+            total_lines = len(transactions)  # Get the total number of lines
             transactions.index = transactions.index + 1  # Change index to start from 1
-            st.markdown("**Filtered Transactions:**")
+            st.markdown(f"**Filtered Transactions: {total_lines} lines**")  # Display the total number of lines
             st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
