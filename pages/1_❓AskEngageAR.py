@@ -61,6 +61,7 @@ def convert_to_sql_condition(natural_language_query):
     group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
     and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
     forecast_date_vs_due_date_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
+    forecast_date_vs_due_date_column_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
 
     print(f"Processing query: {natural_language_query}")
 
@@ -70,9 +71,22 @@ def convert_to_sql_condition(natural_language_query):
         print(f"Forecast vs Due Date Matches: {matches}")
         if matches:
             try:
-                column1, value1, column2, _ = matches[0]
-                # Use a placeholder for the dynamic column
-                sql_condition = f"{column1} = '{value1}' AND {column2} > DueDate"
+                column1, value1, column2, value2 = matches[0]
+                # We use the column names directly in the comparison
+                sql_condition = f"{column1} = '{value1}' AND {column2} > {value2}"
+                print(f"Generated SQL Condition: {sql_condition}")
+                return sql_condition
+            except ValueError as e:
+                print(f"Error parsing query: {e}")
+                return f"Error parsing query: {e}"
+    elif forecast_date_vs_due_date_column_pattern.match(natural_language_query):
+        matches = forecast_date_vs_due_date_column_pattern.findall(natural_language_query)
+        print(f"Forecast Date vs Due Date Column Matches: {matches}")
+        if matches:
+            try:
+                column1, column2 = matches[0]
+                # Perform comparison between columns
+                sql_condition = f"{column1} > {column2}"
                 print(f"Generated SQL Condition: {sql_condition}")
                 return sql_condition
             except ValueError as e:
@@ -131,6 +145,7 @@ def convert_to_sql_condition(natural_language_query):
     else:
         print(f"Unrecognized query format: {natural_language_query}")
         return f"Unrecognized query format: {natural_language_query}"  # Fallback to return the original query if it doesn't match
+
 
 
 
