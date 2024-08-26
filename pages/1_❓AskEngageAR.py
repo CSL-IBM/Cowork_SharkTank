@@ -149,6 +149,7 @@ def main():
     """)
 
     example_inquiries = [
+        "Show all transactions",
         "Show the transactions where the 'Category' is 'Green'",
         "Show the transactions where the 'CustomerNumber' is '988587'",
         "Show the transactions where the 'InvoiceAmount' is greater than '50000000'",
@@ -159,8 +160,7 @@ def main():
         "Show the transactions where the 'Collector' is 'Lisa' and the 'Category' is 'Yellow'",
         "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
-        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
-        "Show all transactions"
+        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'"
     ]
     
     st.markdown("**Example Inquiries:**")
@@ -189,7 +189,7 @@ def main():
             file_name='transactions_EngageAR_Contract.csv',
             mime='text/csv'
         )
-
+        
 if __name__ == '__main__':
     main()
 
