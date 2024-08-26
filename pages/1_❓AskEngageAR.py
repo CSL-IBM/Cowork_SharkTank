@@ -160,36 +160,38 @@ def main():
         "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
-        "Show all transactions"
+        "Show All transactions"
     ]
     
     st.markdown("**Example Inquiries:**")
     selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
-
     natural_language_inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
-
+    
+    if 'transactions' not in st.session_state:
+        st.session_state.transactions = pd.DataFrame()
+    
     sql_condition = convert_to_sql_condition(natural_language_inquiry)
-
+    
     if st.button('Submit'):
         try:
-            transactions = fetch_transactions(sql_condition)
-            total_lines = len(transactions)
-            transactions.index = transactions.index + 1
+            st.session_state.transactions = fetch_transactions(sql_condition)
+            total_lines = len(st.session_state.transactions)
+            st.session_state.transactions.index = st.session_state.transactions.index + 1
             line_text = "line" if total_lines == 1 else "lines"
             st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")
-            st.dataframe(transactions)
-            
-            # Add download button for CSV file
-            with open('transactions_EngageAR_Contract.csv', 'r') as file:
-                st.download_button(
-                    label="Download Raw Data",
-                    data=file,
-                    file_name='transactions_EngageAR_Contract.csv',
-                    mime='text/csv'
-                )
+            st.dataframe(st.session_state.transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
+    
+    if not st.session_state.transactions.empty:
+        with open('transactions_EngageAR_Contract.csv', 'r') as file:
+            st.download_button(
+                label="Download Raw Data",
+                data=file,
+                file_name='transactions_EngageAR_Contract.csv',
+                mime='text/csv'
+            )
+    
 if __name__ == '__main__':
     main()
 
