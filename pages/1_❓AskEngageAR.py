@@ -156,7 +156,12 @@ def convert_to_sql_condition(natural_language_query):
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    
+    if inquiry:  # If there is an inquiry condition
+        query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    else:  # If no inquiry condition
+        query = "SELECT * FROM transactions_EngageAR_Contract ORDER BY InvoiceDate DESC"
+    
     transactions = pd.read_sql_query(query, conn)
     conn.close()
     return transactions
