@@ -76,11 +76,12 @@ def convert_to_sql_condition(natural_language_query):
         column, value, group_by = group_by_pattern.findall(natural_language_query)[0]
         return f"{column} = '{value}' GROUP BY {group_by}"
     elif and_condition_pattern.match(natural_language_query):
-        # Extract the part after 'show the transactions where'
+        # Extract the conditions part
         conditions_part = and_condition_pattern.findall(natural_language_query)[0]
 
-        # Split the conditions into individual conditions based on 'and the'
-        conditions = re.split(r' and the ', conditions_part, flags=re.IGNORECASE)
+        # Split conditions by 'and the' and trim whitespace
+        conditions = [cond.strip() for cond in re.split(r'\s+and\s+', conditions_part, flags=re.IGNORECASE)]
+        
         sql_conditions = []
         for condition in conditions:
             # Process each condition
@@ -108,7 +109,6 @@ def convert_to_sql_condition(natural_language_query):
         return ' AND '.join(sql_conditions)
     else:
         return natural_language_query  # Fallback to return the original query if it doesn't match
-
 
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
