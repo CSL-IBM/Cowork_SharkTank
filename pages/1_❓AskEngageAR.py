@@ -147,6 +147,10 @@ def main():
             # Fetch and display category counts
             category_counts = fetch_category_counts(sql_condition)
             
+            # Define color mapping for categories
+            color_scale = alt.Scale(domain=['Red', 'Yellow', 'Green'],
+                                    range=['#FF0000', '#FFFF00', '#00FF00'])  # Red, Yellow, Green colors
+
             # Create columns to display charts side by side
             col1, col2, col3 = st.columns(3)
 
@@ -160,12 +164,12 @@ def main():
                 })
                 red_chart = alt.Chart(red_data).mark_arc().encode(
                     theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal"),
+                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Red Category',
-                    width=300,  # Adjust width
-                    height=300  # Adjust height
+                    width=200,  # Adjust width
+                    height=200  # Adjust height
                 )
                 st.altair_chart(red_chart, use_container_width=False)
                 st.markdown(f"**Red Category Count:** {red_count}")
@@ -180,12 +184,12 @@ def main():
                 })
                 yellow_chart = alt.Chart(yellow_data).mark_arc().encode(
                     theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal"),
+                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Yellow Category',
-                    width=300,  # Adjust width
-                    height=300  # Adjust height
+                    width=200,  # Adjust width
+                    height=200  # Adjust height
                 )
                 st.altair_chart(yellow_chart, use_container_width=False)
                 st.markdown(f"**Yellow Category Count:** {yellow_count}")
@@ -200,12 +204,12 @@ def main():
                 })
                 green_chart = alt.Chart(green_data).mark_arc().encode(
                     theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal"),
+                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Green Category',
-                    width=300,  # Adjust width
-                    height=300  # Adjust height
+                    width=200,  # Adjust width
+                    height=20  # Adjust height
                 )
                 st.altair_chart(green_chart, use_container_width=False)
                 st.markdown(f"**Green Category Count:** {green_count}")
