@@ -58,9 +58,15 @@ def convert_to_sql_condition(natural_language_query):
     date_literal_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
     group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
     and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
+    forecast_date_vs_due_date_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
 
     # Match the query with patterns and convert to SQL condition
-    if and_condition_pattern.match(natural_language_query):
+    if forecast_date_vs_due_date_pattern.match(natural_language_query):
+        matches = forecast_date_vs_due_date_pattern.findall(natural_language_query)
+        if matches:
+            column1, value1, column2 = matches[0]
+            return f"{column1} = '{value1}' AND {column2} > {column2}"
+    elif and_condition_pattern.match(natural_language_query):
         conditions_str = and_condition_pattern.findall(natural_language_query)[0]
         conditions = [cond.strip() for cond in conditions_str.split('and')]
         sql_conditions = []
@@ -91,6 +97,7 @@ def convert_to_sql_condition(natural_language_query):
         return f"{column} = '{value}' GROUP BY {group_by}"
     else:
         return natural_language_query  # Fallback to return the original query if it doesn't match
+
 
 
 # Function to fetch transactions based on the inquiry
