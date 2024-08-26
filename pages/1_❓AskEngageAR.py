@@ -56,95 +56,85 @@ def convert_to_sql_condition(natural_language_query):
     # Define regex patterns for different types of queries
     equality_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)'", re.IGNORECASE)
     greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
-    date_greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
+    date_greater_than_now_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
     date_literal_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
     group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
     and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
     forecast_date_vs_due_date_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
     forecast_date_vs_due_date_column_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
 
-    print(f"Processing query: {natural_language_query}")
-
     # Match the query with patterns and convert to SQL condition
-    if forecast_date_vs_due_date_pattern.match(natural_language_query):
+    if natural_language_query.lower() == "show all transactions":
+        return ""
+    elif forecast_date_vs_due_date_pattern.match(natural_language_query):
         matches = forecast_date_vs_due_date_pattern.findall(natural_language_query)
-        print(f"Forecast vs Due Date Matches: {matches}")
         if matches:
             try:
                 column1, value1, column2, value2 = matches[0]
-                # We use the column names directly in the comparison
-                sql_condition = f"{column1} = '{value1}' AND {column2} > {value2}"
-                print(f"Generated SQL Condition: {sql_condition}")
+                sql_condition = f"{column1} = '{value1}' AND {column2} > '{value2}'"
                 return sql_condition
             except ValueError as e:
-                print(f"Error parsing query: {e}")
                 return f"Error parsing query: {e}"
     elif forecast_date_vs_due_date_column_pattern.match(natural_language_query):
         matches = forecast_date_vs_due_date_column_pattern.findall(natural_language_query)
-        print(f"Forecast Date vs Due Date Column Matches: {matches}")
         if matches:
             try:
                 column1, column2 = matches[0]
-                # Perform comparison between columns
                 sql_condition = f"{column1} > {column2}"
-                print(f"Generated SQL Condition: {sql_condition}")
                 return sql_condition
             except ValueError as e:
-                print(f"Error parsing query: {e}")
                 return f"Error parsing query: {e}"
     elif and_condition_pattern.match(natural_language_query):
         conditions_str = and_condition_pattern.findall(natural_language_query)[0]
-        print(f"Conditions String: {conditions_str}")
         conditions = [cond.strip() for cond in conditions_str.split('and')]
         sql_conditions = []
         for condition in conditions:
             if "greater than" in condition:
                 match = re.search(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)
                 if match:
-                    column, value = match.groups()
-                    sql_conditions.append(f"{column} > '{value}'")
+                    column, date_value = match.groups()
+                    sql_conditions.append(f"{column} > '{date_value}'")
                 else:
-                    print(f"Error matching greater than condition: {condition}")
+                    match = re.search(r"'(\w+)' is greater than DATE\('now'\)'", condition, re.IGNORECASE)
+                    if match:
+                        column = match.group(1)
+                        sql_conditions.append(f"{column} > DATE('now')")
+                    else:
+                        return f"Error matching greater than condition: {condition}"
             elif "is" in condition:
                 match = re.search(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)
                 if match:
                     column, value = match.groups()
                     sql_conditions.append(f"{column} = '{value}'")
                 else:
-                    print(f"Error matching equality condition: {condition}")
+                    return f"Error matching equality condition: {condition}"
             else:
                 return f"Unrecognized condition format: {condition}"
         sql_condition = " AND ".join(sql_conditions)
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
     elif equality_pattern.match(natural_language_query):
         column, value = equality_pattern.findall(natural_language_query)[0]
         sql_condition = f"{column} = '{value}'"
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
     elif greater_than_pattern.match(natural_language_query):
         column, value = greater_than_pattern.findall(natural_language_query)[0]
         sql_condition = f"{column} > '{value}'"
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
-    elif date_greater_than_pattern.match(natural_language_query):
-        column = date_greater_than_pattern.findall(natural_language_query)[0]
+    elif date_greater_than_now_pattern.match(natural_language_query):
+        column = date_greater_than_now_pattern.findall(natural_language_query)[0]
         sql_condition = f"{column} > DATE('now')"
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
     elif date_literal_pattern.match(natural_language_query):
         column, date = date_literal_pattern.findall(natural_language_query)[0]
         sql_condition = f"{column} > '{date}'"
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
     elif group_by_pattern.match(natural_language_query):
         column, value, group_by = group_by_pattern.findall(natural_language_query)[0]
         sql_condition = f"{column} = '{value}' GROUP BY {group_by}"
-        print(f"Generated SQL Condition: {sql_condition}")
         return sql_condition
     else:
-        print(f"Unrecognized query format: {natural_language_query}")
-        return f"Unrecognized query format: {natural_language_query}"  # Fallback to return the original query if it doesn't match
+        return f"Unrecognized query format: {natural_language_query}"
+
 
 
 
