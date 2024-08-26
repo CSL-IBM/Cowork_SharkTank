@@ -57,20 +57,23 @@ def convert_to_sql_condition(natural_language_query):
     date_greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
     date_literal_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
     group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
-    and_condition_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
-    and_condition_pattern_date = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
+    and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
 
     # Match the query with patterns and convert to SQL condition
-    if and_condition_pattern_date.match(natural_language_query):
-        matches = and_condition_pattern_date.findall(natural_language_query)
-        if matches:
-            column1, value1, column2, date = matches[0]
-            return f"{column1} = '{value1}' AND {column2} > '{date}'"
-    elif and_condition_pattern.match(natural_language_query):
-        matches = and_condition_pattern.findall(natural_language_query)
-        if matches:
-            column1, value1, column2, value2 = matches[0]
-            return f"{column1} = '{value1}' AND {column2} = '{value2}'"
+    if and_condition_pattern.match(natural_language_query):
+        conditions_str = and_condition_pattern.findall(natural_language_query)[0]
+        conditions = [cond.strip() for cond in conditions_str.split('and')]
+        sql_conditions = []
+        for condition in conditions:
+            if "greater than" in condition:
+                column, value = re.findall(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)[0]
+                sql_conditions.append(f"{column} > '{value}'")
+            elif "is" in condition:
+                column, value = re.findall(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)[0]
+                sql_conditions.append(f"{column} = '{value}'")
+            else:
+                return natural_language_query  # Fallback to return the original query if it doesn't match
+        return " AND ".join(sql_conditions)
     elif equality_pattern.match(natural_language_query):
         column, value = equality_pattern.findall(natural_language_query)[0]
         return f"{column} = '{value}'"
