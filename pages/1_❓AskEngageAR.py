@@ -6,31 +6,22 @@ import re
 
 st.set_page_config(layout="wide")
 
-# 명시적으로 CSV 파일의 열 이름을 지정합니다.
 header = [
     "Category", "CustomerName", "CustomerNumber", "InvoiceNumber", 
     "InvoiceAmount", "InvoiceDate", "DueDate", "ForecastCode", 
     "ForecastDate", "Collector", "ContractNo", "Link"
 ]
 
-# Function to create SQLite table and import data from CSV
 def create_table_from_csv():
     conn = sqlite3.connect('history.db')
     c = conn.cursor()
-
-    # Drop the table if it exists to avoid schema mismatch
     c.execute('DROP TABLE IF EXISTS transactions_EngageAR_Contract')
-
-    # Create table dynamically based on specified header
     columns = ', '.join([f"{col} TEXT" for col in header])
     c.execute(f'''CREATE TABLE IF NOT EXISTS transactions_EngageAR_Contract ({columns})''')
-
-    # Read data from CSV and insert into table
+    
     with open('transactions_EngageAR_Contract.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
-        next(csvreader)  # Skip header in the CSV file
-        
-        # Insert CSV data into the table
+        next(csvreader)
         for row in csvreader:
             if len(row) == len(header):
                 placeholders = ', '.join(['?' for _ in row])
@@ -46,14 +37,9 @@ def create_table_from_csv():
     conn.commit()
     conn.close()
 
-# Call the function to create the table and import data
 create_table_from_csv()
 
-# Function to convert natural language inquiry into SQL condition
-import re
-
 def convert_to_sql_condition(natural_language_query):
-    # Define regex patterns for different types of queries
     equality_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)'", re.IGNORECASE)
     greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
     date_greater_than_now_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
@@ -63,7 +49,6 @@ def convert_to_sql_condition(natural_language_query):
     forecast_date_vs_due_date_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
     forecast_date_vs_due_date_column_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
 
-    # Match the query with patterns and convert to SQL condition
     if natural_language_query.lower() == "show all transactions":
         return ""
     elif forecast_date_vs_due_date_pattern.match(natural_language_query):
@@ -95,7 +80,7 @@ def convert_to_sql_condition(natural_language_query):
                     column, date_value = match.groups()
                     sql_conditions.append(f"{column} > '{date_value}'")
                 else:
-                    match = re.search(r"'(\w+)' is greater than DATE\('now'\)'", condition, re.IGNORECASE)
+                    match = re.search(r"'(\w+)' is greater than DATE\('now'\)", condition, re.IGNORECASE)
                     if match:
                         column = match.group(1)
                         sql_conditions.append(f"{column} > DATE('now')")
@@ -135,22 +120,20 @@ def convert_to_sql_condition(natural_language_query):
     else:
         return f"Unrecognized query format: {natural_language_query}"
 
-
-
-
-
-
-
-
-# Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
-    transactions = pd.read_sql_query(query, conn)
+    if inquiry:
+        query = f"SELECT * FROM transactions_EngageAR_Contract WHERE {inquiry} ORDER BY InvoiceDate DESC"
+    else:
+        query = "SELECT * FROM transactions_EngageAR_Contract ORDER BY InvoiceDate DESC"
+    try:
+        transactions = pd.read_sql_query(query, conn)
+    except Exception as e:
+        st.write(f"Error executing query: {e}")
+        transactions = pd.DataFrame()  # Return an empty DataFrame on error
     conn.close()
     return transactions
 
-# Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Engage AR')
 
@@ -165,7 +148,6 @@ def main():
         **Note: This prompt uses fictional data, and the customer and invoice information used are fictitious creations.**
     """)
 
-    # Example inquiries section
     example_inquiries = [
         "Show the transactions where the 'Category' is 'Green'",
         "Show the transactions where the 'CustomerNumber' is '988587'",
@@ -178,25 +160,23 @@ def main():
         "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
+        "Show all transactions"
     ]
     
     st.markdown("**Example Inquiries:**")
     selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
 
-    # Form for inquiry submission
     natural_language_inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
 
-    # Convert the natural language inquiry to SQL condition
     sql_condition = convert_to_sql_condition(natural_language_inquiry)
 
-    # Display transactions table based on the inquiry
     if st.button('Submit'):
         try:
             transactions = fetch_transactions(sql_condition)
-            total_lines = len(transactions)  # Get the total number of lines
-            transactions.index = transactions.index + 1  # Change index to start from 1
+            total_lines = len(transactions)
+            transactions.index = transactions.index + 1
             line_text = "line" if total_lines == 1 else "lines"
-            st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
+            st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")
             st.dataframe(transactions)
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
