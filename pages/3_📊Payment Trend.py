@@ -187,6 +187,17 @@ def main():
                 st.dataframe(transactions.drop(columns=['PaymentDate']), width=1800)
             else:
                 st.markdown("**There are no transactions for the given inquiry.**")
+
+
+                    # Add download button for CSV file
+            with open('transactions_EngageAR_Contract.csv', 'r') as file:
+                st.download_button(
+                    label="Download Raw Data",
+                    data=file,
+                    file_name='transactions_EngageAR_Contract.csv',
+                    mime='text/csv'
+                )
+                
         except Exception as e:
             st.markdown(f"**오류 발생:** {str(e)}")
 
