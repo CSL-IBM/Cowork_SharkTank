@@ -3,7 +3,6 @@ import sqlite3
 import pandas as pd
 import csv
 import re
-import altair as alt
 
 st.set_page_config(layout="wide")
 
@@ -90,14 +89,6 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
-# Function to fetch category counts
-def fetch_category_counts(inquiry):
-    conn = sqlite3.connect('history.db', check_same_thread=False)
-    query = f"SELECT Category, COUNT(*) as Count FROM transactions_EngageAR_Contract WHERE {inquiry} GROUP BY Category"
-    category_counts = pd.read_sql_query(query, conn)
-    conn.close()
-    return category_counts
-
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Engage AR')
@@ -143,81 +134,8 @@ def main():
             total_lines = len(transactions)  # Get the total number of lines
             transactions.index = transactions.index + 1  # Change index to start from 1
             line_text = "line" if total_lines == 1 else "lines"
-            
-            # Fetch and display category counts
-            category_counts = fetch_category_counts(sql_condition)
-            
-            # Define color mapping for categories
-            color_scale = alt.Scale(domain=['Red', 'Yellow', 'Green'],
-                                    range=['#FF0000', '#FFFF00', '#00FF00'])  # Red, Yellow, Green colors
-
-            # Create columns to display charts side by side
-            col1, col2, col3 = st.columns(3)
-
-            # Create and display the chart for Red category
-            with col1:
-                red_count = category_counts.query("Category == 'Red'")['Count']
-                red_count = red_count.values[0] if not red_count.empty else 0
-                red_data = pd.DataFrame({
-                    'Category': ['Red'],
-                    'Count': [red_count]
-                })
-                red_chart = alt.Chart(red_data).mark_arc().encode(
-                    theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
-                    tooltip=['Category', 'Count']
-                ).properties(
-                    title='Red Category',
-                    width=200,  # Adjust width
-                    height=200  # Adjust height
-                )
-                st.altair_chart(red_chart, use_container_width=False)
-                st.markdown(f"**Red Category Count:** {red_count}")
-
-            # Create and display the chart for Yellow category
-            with col2:
-                yellow_count = category_counts.query("Category == 'Yellow'")['Count']
-                yellow_count = yellow_count.values[0] if not yellow_count.empty else 0
-                yellow_data = pd.DataFrame({
-                    'Category': ['Yellow'],
-                    'Count': [yellow_count]
-                })
-                yellow_chart = alt.Chart(yellow_data).mark_arc().encode(
-                    theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
-                    tooltip=['Category', 'Count']
-                ).properties(
-                    title='Yellow Category',
-                    width=200,  # Adjust width
-                    height=200  # Adjust height
-                )
-                st.altair_chart(yellow_chart, use_container_width=False)
-                st.markdown(f"**Yellow Category Count:** {yellow_count}")
-
-            # Create and display the chart for Green category
-            with col3:
-                green_count = category_counts.query("Category == 'Green'")['Count']
-                green_count = green_count.values[0] if not green_count.empty else 0
-                green_data = pd.DataFrame({
-                    'Category': ['Green'],
-                    'Count': [green_count]
-                })
-                green_chart = alt.Chart(green_data).mark_arc().encode(
-                    theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal", scale=color_scale),
-                    tooltip=['Category', 'Count']
-                ).properties(
-                    title='Green Category',
-                    width=200,  # Adjust width
-                    height=20  # Adjust height
-                )
-                st.altair_chart(green_chart, use_container_width=False)
-                st.markdown(f"**Green Category Count:** {green_count}")
-
-            # Display the transactions table after the charts
             st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
             st.dataframe(transactions)
-
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
