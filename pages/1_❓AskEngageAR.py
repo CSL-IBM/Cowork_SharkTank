@@ -57,8 +57,8 @@ def convert_to_sql_condition(natural_language_query):
     date_greater_than_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than DATE\('now'\)", re.IGNORECASE)
     date_literal_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", re.IGNORECASE)
     group_by_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' GROUP BY (\w+)", re.IGNORECASE)
-    and_condition_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is '(\w+)'", re.IGNORECASE)
-    
+    and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
+
     # Match the query with patterns and convert to SQL condition
     if equality_pattern.match(natural_language_query):
         column, value = equality_pattern.findall(natural_language_query)[0]
@@ -76,10 +76,39 @@ def convert_to_sql_condition(natural_language_query):
         column, value, group_by = group_by_pattern.findall(natural_language_query)[0]
         return f"{column} = '{value}' GROUP BY {group_by}"
     elif and_condition_pattern.match(natural_language_query):
-        column1, value1, column2, value2 = and_condition_pattern.findall(natural_language_query)[0]
-        return f"{column1} = '{value1}' AND {column2} = '{value2}'"
+        # Extract the part after 'show the transactions where'
+        conditions_part = and_condition_pattern.findall(natural_language_query)[0]
+
+        # Split the conditions into individual conditions based on 'and the'
+        conditions = re.split(r' and the ', conditions_part, flags=re.IGNORECASE)
+        sql_conditions = []
+        for condition in conditions:
+            # Process each condition
+            match = equality_pattern.match(f"show the transactions where {condition}")
+            if match:
+                column, value = match.findall(f"show the transactions where {condition}")[0]
+                sql_conditions.append(f"{column} = '{value}'")
+            else:
+                match = greater_than_pattern.match(f"show the transactions where {condition}")
+                if match:
+                    column, value = match.findall(f"show the transactions where {condition}")[0]
+                    sql_conditions.append(f"{column} > '{value}'")
+                else:
+                    match = date_greater_than_pattern.match(f"show the transactions where {condition}")
+                    if match:
+                        column = match.findall(f"show the transactions where {condition}")[0]
+                        sql_conditions.append(f"{column} > DATE('now')")
+                    else:
+                        match = date_literal_pattern.match(f"show the transactions where {condition}")
+                        if match:
+                            column, date = match.findall(f"show the transactions where {condition}")[0]
+                            sql_conditions.append(f"{column} > '{date}'")
+        
+        # Join all conditions with 'AND'
+        return ' AND '.join(sql_conditions)
     else:
         return natural_language_query  # Fallback to return the original query if it doesn't match
+
 
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
