@@ -164,8 +164,8 @@ def main():
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Red Category',
-                    width=150,  # Adjust width
-                    height=150  # Adjust height
+                    width=300,  # Adjust width
+                    height=300  # Adjust height
                 )
                 st.altair_chart(red_chart, use_container_width=False)
                 st.markdown(f"**Red Category Count:** {red_count}")
@@ -184,8 +184,8 @@ def main():
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Yellow Category',
-                    width=150,  # Adjust width
-                    height=150  # Adjust height
+                    width=300,  # Adjust width
+                    height=300  # Adjust height
                 )
                 st.altair_chart(yellow_chart, use_container_width=False)
                 st.markdown(f"**Yellow Category Count:** {yellow_count}")
@@ -204,8 +204,8 @@ def main():
                     tooltip=['Category', 'Count']
                 ).properties(
                     title='Green Category',
-                    width=150,  # Adjust width
-                    height=150  # Adjust height
+                    width=300,  # Adjust width
+                    height=300  # Adjust height
                 )
                 st.altair_chart(green_chart, use_container_width=False)
                 st.markdown(f"**Green Category Count:** {green_count}")
