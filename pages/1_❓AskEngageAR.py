@@ -50,8 +50,6 @@ def create_table_from_csv():
 create_table_from_csv()
 
 # Function to convert natural language inquiry into SQL condition
-import re
-
 def convert_to_sql_condition(natural_language_query):
     # Define regex patterns for different types of queries
     equality_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)'", re.IGNORECASE)
@@ -148,11 +146,6 @@ def convert_to_sql_condition(natural_language_query):
         print(f"Unrecognized query format: {natural_language_query}")
         return f"Unrecognized query format: {natural_language_query}"  # Fallback to return the original query if it doesn't match
 
-
-
-
-
-
 # Function to fetch transactions based on the inquiry
 def fetch_transactions(inquiry):
     conn = sqlite3.connect('history.db', check_same_thread=False)
@@ -166,58 +159,21 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
-# Initialize Streamlit app
+# Main function to handle Streamlit UI
 def main():
-    st.title('Text-To-SQL : Engage AR')
+    st.title("Transaction Inquiry System")
 
-    st.markdown("""
-        Welcome to Text-To-SQL.  
-        Here, you can inquire about various aspects of Engage AR transactions.  
-        Use Example Inquiries to refer to the question format.  
-        
-        **Important** : Modify the parts marked with **''** to get the answers you want.  
-        The system operates by converting your text inquiries into SQL statements and matching them with linked data in the repository to respond.  
+    # Input for natural language query
+    natural_language_inquiry = st.text_input("Enter your inquiry:", "")
 
-        **Note: This prompt uses fictional data, and the customer and invoice information used are fictitious creations.**
-    """)
-
-    # Example inquiries section
-    example_inquiries = [
-        "Show the transactions where the 'Category' is 'Green'",
-        "Show the transactions where the 'CustomerNumber' is '988587'",
-        "Show the transactions where the 'InvoiceAmount' is greater than '50000000'",
-        "Show the transactions where the 'ForecastCode' is 'AUTO'",
-        "Show the transactions where the 'ForecastDate' is greater than DATE('now')",
-        "Show the transactions where the 'DueDate' is greater than DATE('now')",
-        "Show the transactions where the 'DueDate' is greater than '2024-09-04'",
-        "Show the transactions where the 'Collector' is 'Lisa' and the 'Category' is 'Yellow'",
-        "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
-        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
-        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
-    ]
-    
-    st.markdown("**Example Inquiries:**")
-    selected_inquiry = st.selectbox("Select an inquiry example:", example_inquiries)
-
-    # Form for inquiry submission
-    natural_language_inquiry = st.text_input('Submit an Inquiry:', selected_inquiry)
-
-    # Convert the natural language inquiry to SQL condition
+    # Convert natural language to SQL condition
     sql_condition = convert_to_sql_condition(natural_language_inquiry)
+    
+    # Fetch transactions based on the SQL condition
+    transactions = fetch_transactions(sql_condition)
+    
+    # Display transactions
+    st.write(transactions)
 
-    # Display transactions table based on the inquiry
-    if st.button('Submit'):
-        try:
-            transactions = fetch_transactions(sql_condition)
-            total_lines = len(transactions)  # Get the total number of lines
-            transactions.index = transactions.index + 1  # Change index to start from 1
-            line_text = "line" if total_lines == 1 else "lines"
-            st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
-            st.dataframe(transactions)
-        except Exception as e:
-            st.markdown(f"**Error occurred:** {str(e)}")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-st.caption(f"© Made by Korea AR Team for SharkTank 2024. All rights reserved.")
