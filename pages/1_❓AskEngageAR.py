@@ -62,17 +62,20 @@ def convert_to_sql_condition(natural_language_query):
     and_condition_pattern = re.compile(r"show the transactions where (.+)", re.IGNORECASE)
     forecast_date_vs_due_date_pattern = re.compile(r"show the transactions where the '(\w+)' is '(\w+)' and the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
     forecast_date_vs_due_date_column_pattern = re.compile(r"show the transactions where the '(\w+)' is greater than '(\w+)'", re.IGNORECASE)
+    show_all_pattern = re.compile(r"show all transactions|show the transactions", re.IGNORECASE)
 
     print(f"Processing query: {natural_language_query}")
 
     # Match the query with patterns and convert to SQL condition
-    if forecast_date_vs_due_date_pattern.match(natural_language_query):
+    if show_all_pattern.match(natural_language_query):
+        print("Generating SQL condition for showing all transactions")
+        return ""  # No WHERE clause needed for showing all transactions
+    elif forecast_date_vs_due_date_pattern.match(natural_language_query):
         matches = forecast_date_vs_due_date_pattern.findall(natural_language_query)
         print(f"Forecast vs Due Date Matches: {matches}")
         if matches:
             try:
                 column1, value1, column2, value2 = matches[0]
-                # We use the column names directly in the comparison
                 sql_condition = f"{column1} = '{value1}' AND {column2} > {value2}"
                 print(f"Generated SQL Condition: {sql_condition}")
                 return sql_condition
@@ -85,7 +88,6 @@ def convert_to_sql_condition(natural_language_query):
         if matches:
             try:
                 column1, column2 = matches[0]
-                # Perform comparison between columns
                 sql_condition = f"{column1} > {column2}"
                 print(f"Generated SQL Condition: {sql_condition}")
                 return sql_condition
@@ -145,7 +147,6 @@ def convert_to_sql_condition(natural_language_query):
     else:
         print(f"Unrecognized query format: {natural_language_query}")
         return f"Unrecognized query format: {natural_language_query}"  # Fallback to return the original query if it doesn't match
-
 
 
 
