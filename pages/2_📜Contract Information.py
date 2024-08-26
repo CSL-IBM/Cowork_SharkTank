@@ -117,20 +117,9 @@ def main():
             line_text = "line" if total_lines == 1 else "lines"
             st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
             st.dataframe(transactions)
-
-            )
             
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
-
-    # Add download button for CSV file
-    with open('transactions_EngageAR_Contract.csv', 'r') as file:
-        st.download_button(
-            label="Download Raw Data",
-            data=file,
-            file_name='transactions_EngageAR_Contract.csv',
-            mime='text/csv'
-        )
 
 if __name__ == '__main__':
     main()
