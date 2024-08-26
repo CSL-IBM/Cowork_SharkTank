@@ -162,8 +162,12 @@ def main():
                     theta=alt.Theta(field="Count", type="quantitative"),
                     color=alt.Color(field="Category", type="nominal"),
                     tooltip=['Category', 'Count']
-                ).properties(title='Red Category')
-                st.altair_chart(red_chart, use_container_width=True)
+                ).properties(
+                    title='Red Category',
+                    width=150,  # Adjust width
+                    height=150  # Adjust height
+                )
+                st.altair_chart(red_chart, use_container_width=False)
                 st.markdown(f"**Red Category Count:** {red_count}")
 
             # Create and display the chart for Yellow category
@@ -178,8 +182,12 @@ def main():
                     theta=alt.Theta(field="Count", type="quantitative"),
                     color=alt.Color(field="Category", type="nominal"),
                     tooltip=['Category', 'Count']
-                ).properties(title='Yellow Category')
-                st.altair_chart(yellow_chart, use_container_width=True)
+                ).properties(
+                    title='Yellow Category',
+                    width=150,  # Adjust width
+                    height=150  # Adjust height
+                )
+                st.altair_chart(yellow_chart, use_container_width=False)
                 st.markdown(f"**Yellow Category Count:** {yellow_count}")
 
             # Create and display the chart for Green category
@@ -194,8 +202,12 @@ def main():
                     theta=alt.Theta(field="Count", type="quantitative"),
                     color=alt.Color(field="Category", type="nominal"),
                     tooltip=['Category', 'Count']
-                ).properties(title='Green Category')
-                st.altair_chart(green_chart, use_container_width=True)
+                ).properties(
+                    title='Green Category',
+                    width=150,  # Adjust width
+                    height=150  # Adjust height
+                )
+                st.altair_chart(green_chart, use_container_width=False)
                 st.markdown(f"**Green Category Count:** {green_count}")
 
             # Display the transactions table after the charts
