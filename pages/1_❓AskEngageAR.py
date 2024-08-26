@@ -152,16 +152,29 @@ def main():
                 st.markdown("**Category Counts:**")
                 st.dataframe(category_counts)
 
-                # Plot category counts as a pie chart
-                chart = alt.Chart(category_counts).mark_arc().encode(
-                    theta=alt.Theta(field="Count", type="quantitative"),
-                    color=alt.Color(field="Category", type="nominal"),
-                    tooltip=['Category', 'Count']
-                ).properties(
-                    title='Category Distribution'
-                )
+                # Plot individual category counts
+                for category in ['Red', 'Yellow', 'Green']:
+                    count = category_counts.query(f"Category == '{category}'")['Count']
+                    count = count.values[0] if not count.empty else 0
 
-                st.altair_chart(chart, use_container_width=True)
+                    # Create a DataFrame for the specific category
+                    data = pd.DataFrame({
+                        'Category': [category],
+                        'Count': [count]
+                    })
+
+                    # Plot the category count as a pie chart
+                    chart = alt.Chart(data).mark_arc().encode(
+                        theta=alt.Theta(field="Count", type="quantitative"),
+                        color=alt.Color(field="Category", type="nominal"),
+                        tooltip=['Category', 'Count']
+                    ).properties(
+                        title=f'{category} Category'
+                    )
+
+                    st.altair_chart(chart, use_container_width=True)
+                    st.markdown(f"**{category} Category Count:** {count}")
+
             else:
                 st.markdown("No data found for the given criteria.")
         except Exception as e:
