@@ -64,8 +64,8 @@ def convert_to_sql_condition(natural_language_query):
     if forecast_date_vs_due_date_pattern.match(natural_language_query):
         matches = forecast_date_vs_due_date_pattern.findall(natural_language_query)
         if matches:
-            # This pattern expects two columns and a value for the greater than comparison
             try:
+                # Adjust this pattern according to the exact requirement
                 column1, value1, column2 = matches[0]
                 return f"{column1} = '{value1}' AND {column2} > {column2}"
             except ValueError as e:
@@ -76,15 +76,17 @@ def convert_to_sql_condition(natural_language_query):
         sql_conditions = []
         for condition in conditions:
             if "greater than" in condition:
-                column, value = re.findall(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)
-                if column and value:
+                match = re.search(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)
+                if match:
+                    column, value = match.groups()
                     sql_conditions.append(f"{column} > '{value}'")
             elif "is" in condition:
-                column, value = re.findall(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)
-                if column and value:
+                match = re.search(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)
+                if match:
+                    column, value = match.groups()
                     sql_conditions.append(f"{column} = '{value}'")
             else:
-                return natural_language_query  # Fallback to return the original query if it doesn't match
+                return f"Unrecognized condition format: {condition}"
         return " AND ".join(sql_conditions)
     elif equality_pattern.match(natural_language_query):
         column, value = equality_pattern.findall(natural_language_query)[0]
@@ -102,7 +104,8 @@ def convert_to_sql_condition(natural_language_query):
         column, value, group_by = group_by_pattern.findall(natural_language_query)[0]
         return f"{column} = '{value}' GROUP BY {group_by}"
     else:
-        return natural_language_query  # Fallback to return the original query if it doesn't match
+        return f"Unrecognized query format: {natural_language_query}"  # Fallback to return the original query if it doesn't match
+
 
 
 
