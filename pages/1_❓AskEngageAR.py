@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import csv
 import re
+import altair as alt
 
 st.set_page_config(layout="wide")
 
@@ -89,6 +90,14 @@ def fetch_transactions(inquiry):
     conn.close()
     return transactions
 
+# Function to fetch category counts
+def fetch_category_counts(inquiry):
+    conn = sqlite3.connect('history.db', check_same_thread=False)
+    query = f"SELECT Category, COUNT(*) as Count FROM transactions_EngageAR_Contract WHERE {inquiry} GROUP BY Category"
+    category_counts = pd.read_sql_query(query, conn)
+    conn.close()
+    return category_counts
+
 # Initialize Streamlit app
 def main():
     st.title('Text-To-SQL : Engage AR')
@@ -136,6 +145,26 @@ def main():
             line_text = "line" if total_lines == 1 else "lines"
             st.markdown(f"**Filtered Transactions: {total_lines} {line_text}**")  # Display the total number of lines
             st.dataframe(transactions)
+
+            # Fetch and display category counts
+            category_counts = fetch_category_counts(sql_condition)
+            if not category_counts.empty:
+                st.markdown("**Category Counts:**")
+                st.dataframe(category_counts)
+
+                # Plot category counts
+                chart = alt.Chart(category_counts).mark_bar().encode(
+                    x='Category:O',
+                    y='Count:Q',
+                    color='Category:N',
+                    tooltip=['Category', 'Count']
+                ).properties(
+                    title='Category Counts'
+                )
+
+                st.altair_chart(chart, use_container_width=True)
+            else:
+                st.markdown("No data found for the given criteria.")
         except Exception as e:
             st.markdown(f"**Error occurred:** {str(e)}")
 
