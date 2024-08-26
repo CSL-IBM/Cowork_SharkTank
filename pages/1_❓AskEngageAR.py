@@ -69,7 +69,7 @@ def convert_to_sql_condition(natural_language_query):
         if matches:
             try:
                 column1, value1, column2, value2 = matches[0]
-                sql_condition = f"{column1} = '{value1}' AND {column2} > {value2}"
+                sql_condition = f"{column1} = '{value1}' AND {column2} > '{value2}'"
                 return sql_condition
             except ValueError as e:
                 return f"Error parsing query: {e}"
@@ -93,7 +93,12 @@ def convert_to_sql_condition(natural_language_query):
                     column, value = match.groups()
                     sql_conditions.append(f"{column} > '{value}'")
                 else:
-                    return f"Error matching greater than condition: {condition}"
+                    match = re.search(r"'(\w+)' is greater than DATE\('now'\)'", condition, re.IGNORECASE)
+                    if match:
+                        column = match.group(1)
+                        sql_conditions.append(f"{column} > DATE('now')")
+                    else:
+                        return f"Error matching greater than condition: {condition}"
             elif "is" in condition:
                 match = re.search(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)
                 if match:
@@ -167,7 +172,7 @@ def main():
         "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
         "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
-        "Show All transactions"  # New option added here
+        "Show all transactions"
     ]
     
     st.markdown("**Example Inquiries:**")
