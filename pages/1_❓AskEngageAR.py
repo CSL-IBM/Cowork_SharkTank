@@ -64,19 +64,25 @@ def convert_to_sql_condition(natural_language_query):
     if forecast_date_vs_due_date_pattern.match(natural_language_query):
         matches = forecast_date_vs_due_date_pattern.findall(natural_language_query)
         if matches:
-            column1, value1, column2 = matches[0]
-            return f"{column1} = '{value1}' AND {column2} > {column2}"
+            # This pattern expects two columns and a value for the greater than comparison
+            try:
+                column1, value1, column2 = matches[0]
+                return f"{column1} = '{value1}' AND {column2} > {column2}"
+            except ValueError as e:
+                return f"Error parsing query: {e}"
     elif and_condition_pattern.match(natural_language_query):
         conditions_str = and_condition_pattern.findall(natural_language_query)[0]
         conditions = [cond.strip() for cond in conditions_str.split('and')]
         sql_conditions = []
         for condition in conditions:
             if "greater than" in condition:
-                column, value = re.findall(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)[0]
-                sql_conditions.append(f"{column} > '{value}'")
+                column, value = re.findall(r"'(\w+)' is greater than '(\d{4}-\d{2}-\d{2})'", condition, re.IGNORECASE)
+                if column and value:
+                    sql_conditions.append(f"{column} > '{value}'")
             elif "is" in condition:
-                column, value = re.findall(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)[0]
-                sql_conditions.append(f"{column} = '{value}'")
+                column, value = re.findall(r"'(\w+)' is '(\w+)'", condition, re.IGNORECASE)
+                if column and value:
+                    sql_conditions.append(f"{column} = '{value}'")
             else:
                 return natural_language_query  # Fallback to return the original query if it doesn't match
         return " AND ".join(sql_conditions)
@@ -97,6 +103,7 @@ def convert_to_sql_condition(natural_language_query):
         return f"{column} = '{value}' GROUP BY {group_by}"
     else:
         return natural_language_query  # Fallback to return the original query if it doesn't match
+
 
 
 
