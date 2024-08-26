@@ -168,10 +168,11 @@ def main():
         "Show the transactions where the 'ForecastCode' is 'AUTO'",
         "Show the transactions where the 'ForecastDate' is greater than DATE('now')",
         "Show the transactions where the 'DueDate' is greater than DATE('now')",
-        "Show the transactions where the 'DueDate' is greater than '2024-08-10'",
+        "Show the transactions where the 'DueDate' is greater than '2024-09-04'",
         "Show the transactions where the 'Collector' is 'Lisa' and the 'Category' is 'Yellow'",
         "Show the transactions where the 'Collector' is 'David' and the 'ForecastCode' is 'AUTO'",
-        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-08-01'",
+        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than '2024-10-01'",
+        "Show the transactions where the 'Collector' is 'John' and the 'ForecastDate' is greater than 'DueDate'",
     ]
     
     st.markdown("**Example Inquiries:**")
