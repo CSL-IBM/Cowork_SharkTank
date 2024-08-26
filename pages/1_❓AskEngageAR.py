@@ -152,14 +152,13 @@ def main():
                 st.markdown("**Category Counts:**")
                 st.dataframe(category_counts)
 
-                # Plot category counts
-                chart = alt.Chart(category_counts).mark_bar().encode(
-                    x='Category:O',
-                    y='Count:Q',
-                    color='Category:N',
+                # Plot category counts as a pie chart
+                chart = alt.Chart(category_counts).mark_arc().encode(
+                    theta=alt.Theta(field="Count", type="quantitative"),
+                    color=alt.Color(field="Category", type="nominal"),
                     tooltip=['Category', 'Count']
                 ).properties(
-                    title='Category Counts'
+                    title='Category Distribution'
                 )
 
                 st.altair_chart(chart, use_container_width=True)
