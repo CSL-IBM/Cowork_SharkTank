@@ -150,7 +150,7 @@ def main():
 
     example_inquiries = [
         "Show all transactions",
-        "Show the transactions where the 'Category' is 'Green'",
+        "Show the transactions where the 'Category' is 'Red'",
         "Show the transactions where the 'CustomerNumber' is '988587'",
         "Show the transactions where the 'InvoiceAmount' is greater than '50000000'",
         "Show the transactions where the 'ForecastCode' is 'AUTO'",
