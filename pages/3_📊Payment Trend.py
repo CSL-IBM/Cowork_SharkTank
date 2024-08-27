@@ -192,11 +192,11 @@ def main():
             st.markdown(f"**오류 발생:** {str(e)}")
 
     # Display the download button outside of the submit button logic
-    with open('transactions_EngageAR_Contract.csv', 'r') as file:
+    with open('transactions_Payment.csv', 'r') as file:
         st.download_button(
             label="Download Raw Data",
             data=file,
-            file_name='transactions_EngageAR_Contract.csv',
+            file_name='transactions_Payment.csv',
             mime='text/csv'
         )
 
